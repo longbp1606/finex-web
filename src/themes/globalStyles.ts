@@ -9,7 +9,7 @@ const GlobalStyles = createGlobalStyle`
 
         color-scheme: light dark;
         color: rgba(255, 255, 255, 0.87);
-        background-color: #242424;
+        background-color: #fff;
 
         font-synthesis: none;
         text-rendering: optimizeLegibility;
@@ -29,11 +29,7 @@ const GlobalStyles = createGlobalStyle`
 
     body {
         margin: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 320px;
-        min-height: 100vh;
+        padding: 0;
     }
 
     h1 {
@@ -59,19 +55,6 @@ const GlobalStyles = createGlobalStyle`
     button:focus,
     button:focus-visible {
         outline: 4px auto -webkit-focus-ring-color;
-    }
-
-    @media (prefers-color-scheme: light) {
-        :root {
-            color: #213547;
-            background-color: #ffffff;
-        }
-        a:hover {
-            color: #747bff;
-        }
-        button {
-            background-color: #f9f9f9;
-        }
     }
 `;
 

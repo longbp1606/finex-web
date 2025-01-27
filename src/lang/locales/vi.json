@@ -1,3 +1,13 @@
 {
-    "appName": "Đặt tên app của bạn ở đây"
+    "userSider": {
+        "dashboard": "Bảng điều khiển",
+        "board": "Bảng",
+        "analysis": "Phân tích",
+        "record": "Bản ghi",
+        "category": "Danh mục"
+    },
+    "adminSider": {
+        "systemCategory": "Danh mục hệ thống",
+        "userAccount": "Tài khoản người dùng"
+    }
 }

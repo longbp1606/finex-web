@@ -8,6 +8,8 @@ import { createStyledBreakpointsTheme } from 'styled-breakpoints';
 import GlobalStyles from './themes/globalStyles.ts';
 import { store } from './store/index.ts';
 import LanguageProvider from './lang/LanguageProvider.tsx';
+import { ConfigProvider, App as AppAntd } from 'antd';
+import { AntdThemeConfig } from './themes/index.ts';
 
 export const breakpoints = {
   xs: '360px',
@@ -25,12 +27,16 @@ const theme: DefaultTheme = createStyledBreakpointsTheme({
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <Provider store={store}>
-        <LanguageProvider>
-          <App />
-        </LanguageProvider>
-      </Provider>
-      <GlobalStyles />
+      <ConfigProvider theme={AntdThemeConfig}>
+        <AppAntd>
+          <Provider store={store}>
+            <LanguageProvider>
+              <App />
+            </LanguageProvider>
+          </Provider>
+          <GlobalStyles />
+        </AppAntd>
+      </ConfigProvider>
     </ThemeProvider>
   </React.StrictMode>,
 )
