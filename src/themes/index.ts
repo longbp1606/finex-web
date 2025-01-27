@@ -1,5 +1,5 @@
-const PRIMARY_COLOR: string = '#151542';
-const SECONDARY_COLOR: string = '#FFFFFF';
+const PRIMARY_COLOR: string = '#18453E';
+const SECONDARY_COLOR: string = '#BCF49D';
 
 export const theme = {
     light: '',
@@ -62,7 +62,12 @@ export const AntdThemeConfig = {
         colorPrimary: PRIMARY_COLOR,
         colorSecondary: SECONDARY_COLOR,
         colorLink: PRIMARY_COLOR,
-        fontFamily: 'Inter',
         colorLinkHover: PRIMARY_COLOR,
+        colorText: PRIMARY_COLOR,
+    },
+    components: {
+        Menu: {
+            itemColor: PRIMARY_COLOR,
+        },
     },
 };
