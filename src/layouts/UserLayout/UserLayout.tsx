@@ -17,23 +17,23 @@ const menuItems: MenuItemType[] = [
         icon: <MdOutlineDashboard />,
     },
     {
-        key: "board",
-        label: 'Board',
+        key: "transaction",
+        label: 'Transaction',
         icon: <MdGridOn />,
-    },
-    {
-        key: "analysis",
-        label: 'Analysis',
-        icon: <SiGoogleanalytics />,
-    },
-    {
-        key: "record",
-        label: 'Record',
-        icon: <BsRecordBtn />,
     },
     {
         key: "category",
         label: 'Category',
+        icon: <SiGoogleanalytics />,
+    },
+    {
+        key: "report",
+        label: 'Report',
+        icon: <BsRecordBtn />,
+    },
+    {
+        key: "alert",
+        label: 'Alert',
         icon: <MdCategory />,
     },
 ]
