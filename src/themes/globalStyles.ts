@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-// import { theme } from ".";
+import { theme } from ".";
 
 const GlobalStyles = createGlobalStyle`
     :root {
@@ -19,12 +19,12 @@ const GlobalStyles = createGlobalStyle`
 
     a {
         font-weight: 500;
-        color: #646cff;
+        color: ${theme.color.primary};
         text-decoration: inherit;
     }
         
     a:hover {
-        color: #535bf2;
+        color: ${theme.color.secondary};
     }
 
     body {
@@ -48,10 +48,7 @@ const GlobalStyles = createGlobalStyle`
         cursor: pointer;
         transition: border-color 0.25s;
     }
-
-    button:hover {
-        border-color: #646cff;
-    }
+        
     button:focus,
     button:focus-visible {
         outline: 4px auto -webkit-focus-ring-color;
