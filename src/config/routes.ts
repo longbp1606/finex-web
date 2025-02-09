@@ -4,15 +4,17 @@ const routes = {
   },
   user: {
     dashboard: '/user/dashboard',
-    analysis: '/user/analysis',
-    record: '/user/record',
-    board: '/user/board',
-    boardDetails: '/user/board/:id',
+    transaction: '/user/transaction',
+    transactionDetails: '/user/transaction/:id',
     category: '/user/category',
+    report: '/user/report',
+    alert: '/user/alert',
+    userAccount: '/admin/user-account',
   },
   admin: {
-    systemCategory: '/admin/system-category',
-    userAccount: '/admin/user-account',
+    systemCategory: '/admin/systemCategory',
+    dashboard: '/admin/dashboard',
+    account: '/admin/account',
   },
   api: {
     loginGoogle: "/auth/signin",

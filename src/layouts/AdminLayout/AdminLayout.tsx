@@ -1,5 +1,5 @@
 import * as Styled from './AdminLayout.styled';
-import { HomeOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Button, Layout, Menu } from "antd"
 import { MenuItemType } from "antd/es/menu/interface";
 import { useState } from "react";
@@ -10,15 +10,25 @@ const { Header, Content, Footer, Sider } = Layout;
 
 const menuItems: MenuItemType[] = [
     {
-        key: "category",
+        key: "dashboard",
+        label: 'Dashboard',
+        icon: <MdOutlineCategory />,
+    },
+    {
+        key: "systemCategory",
         label: 'System Category',
         icon: <MdOutlineCategory />,
     },
     {
-        key: "userAccount",
-        label: 'User account',
-        icon: <HomeOutlined/>,
+        key: "account",
+        label: 'Account',
+        icon: <MdOutlineCategory />,
     },
+    // {
+    //     key: "userAccount",
+    //     label: 'User account',
+    //     icon: <HomeOutlined/>,
+    // },
 ]
 
 const AdminLayout = () => {
@@ -39,7 +49,7 @@ const AdminLayout = () => {
                     <Menu
                         items={menuItems}
                         selectedKeys={keys.slice(1)}
-                        onSelect={(e) => navigate(`/user/${e.key}`)}
+                        onSelect={(e) => navigate(`/admin/${e.key}`)}
                         className='bg-[#ecf4e9]'
                     />
                 </Sider>
