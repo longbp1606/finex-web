@@ -4,12 +4,14 @@ import { useDocumentTitle } from '@/hooks'
 import { Button, Card, Col, Flex, Image, Input, List, Row, Skeleton, Typography } from 'antd';
 import { FeatureCardContents, FeedbackContents, LogoURLs, navbar } from './Home.const';
 import { MenuType } from '@/utils/type';
-import { ArrowRightOutlined, FacebookFilled, InstagramFilled, XFilled, XOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined, FacebookFilled, InstagramFilled, XOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 const { Paragraph, Text, Title } = Typography;
 
 const Home = () => {
     useDocumentTitle('Finex | Home');
+    const navigate = useNavigate();
 
     return (
         <>
@@ -54,7 +56,7 @@ const Home = () => {
                                 <Text>
                                     The best AI financial manager
                                 </Text>
-                                <Button type='primary'>
+                                <Button type='primary' onClick={() => navigate('/login')}>
                                     Try it free
                                 </Button>
                             </Row>
