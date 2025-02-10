@@ -1,10 +1,10 @@
 import Container from '@/components/Container';
 import * as Styled from './Home.styled';
 import { useDocumentTitle } from '@/hooks'
-import { Button, Card, Col, Flex, Image, List, Row, Skeleton, Typography } from 'antd';
-import { FeatureCardContents, LogoURLs, navbar } from './Home.const';
+import { Button, Card, Col, Flex, Image, Input, List, Row, Skeleton, Typography } from 'antd';
+import { FeatureCardContents, FeedbackContents, LogoURLs, navbar } from './Home.const';
 import { MenuType } from '@/utils/type';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined, FacebookFilled, InstagramFilled, XFilled, XOutlined } from '@ant-design/icons';
 
 const { Paragraph, Text, Title } = Typography;
 
@@ -122,7 +122,7 @@ const Home = () => {
 
             <Styled.FeatureSection>
                 <Container>
-                    <Row justify={"center"} className='flex flex-col mt-40'>
+                    <Row justify={"center"} className='flex flex-col mt-24'>
                         <Title className='text-center'>
                             Together with AI assistants who manage your finances
                             optimally
@@ -132,21 +132,21 @@ const Home = () => {
                         </Text>
                     </Row>
                     <Row justify={"center"}>
-                        <Flex gap={40} className='mt-20' justify='space-between'>
+                        <Flex gap={20} className='mt-20' justify='space-between'>
                             {FeatureCardContents.map((content, index) => (
                                 <Card
                                     cover={
                                         <Skeleton.Image
                                             style={{
                                                 width: '100%',
-                                                height: '200px',
+                                                height: '250px',
                                             }}
                                         />
                                     }
                                     key={index}
-                                    className='w-80'
+                                    className='w-full'
                                 >
-                                    <Card.Meta
+                                    <Styled.FeatureCardMeta
                                         title={content.title}
                                         description={content.description}
                                         className='text-center'
@@ -155,13 +155,209 @@ const Home = () => {
                             ))}
                         </Flex>
                     </Row>
-                    <Row>
-                        <Col>
-                            Sư
-                        </Col>
+                    <Row justify={"space-between"} className='mt-20'>
+                        <Flex gap={20} className='w-full'>
+                            <Styled.CardContainer
+                                className='flex flex-col p-12 mt-4 justify-start w-full'
+                            >
+                                <Title>
+                                    We will seta limit for your spending target costume
+                                </Title>
+                                <Paragraph>
+                                    With FiNex, you can set spending limits and
+                                    track your expenses effortlessly. Our AI-powered
+                                    tools provide insights and recommendations to
+                                    help you stay on top of your financial goals.
+                                </Paragraph>
+                                <Skeleton.Node style={{
+                                    width: '100%',
+                                    height: '300px',
+                                    borderRadius: '12px'
+                                }} />
+                            </Styled.CardContainer>
+                            <Col
+                                className='bg-[#f6f6f6] mt-4 p-12 rounded-xl flex flex-col justify-end w-full'
+                            >
+                                <Skeleton.Node style={{
+                                    width: '100%',
+                                    height: '320px',
+                                    borderRadius: '12px'
+                                }} />
+                                <Title className='mt-4'>
+                                    Tracking your every expense
+                                </Title>
+                                <Paragraph>
+                                    FiNex provides a comprehensive overview of your
+                                    finances, including your income, expenses, and
+                                    savings. Our AI-powered tools help you make
+                                    informed decisions about your finances.
+                                </Paragraph>
+                            </Col>
+                        </Flex>
                     </Row>
                 </Container>
             </Styled.FeatureSection>
+
+            <Styled.FeedbackSection className='bg-[#1b1b1b] p-12'>
+                <Container>
+                    <Row justify={"center"} className='flex flex-col'>
+                        <Title className='text-left'>
+                            What our customers say about FiNex
+                        </Title>
+                        <Text className='text-left'>
+                            FiNex has helped thousands of people manage their finances
+                        </Text>
+                    </Row>
+                    <Row justify={"center"}>
+                        <Flex className='mt-20' justify='space-between' gap={20}>
+                            {FeedbackContents.map((content, index) => (
+                                <Col
+                                    className='flex flex-col gap-10 bg-[#2b2b2b] p-12 rounded-xl w-full'
+                                    key={index}
+                                >
+                                    <Row className='gap-5'>
+                                        <Skeleton.Avatar size={64} />
+                                        <Flex vertical>
+                                            <Title level={4} className='text-white'>
+                                                {content.username}
+                                            </Title>
+                                            <Text className='text-gray-500'>
+                                                {content.career}
+                                            </Text>
+                                        </Flex>
+                                    </Row>
+                                    <Paragraph className='text-white'>
+                                        {content.feedback}
+                                    </Paragraph>
+                                </Col>
+                            ))}
+                        </Flex>
+                    </Row>
+                </Container>
+            </Styled.FeedbackSection>
+
+            <Styled.ContactSection>
+                <Container>
+                    <Row justify={"center"} className='flex flex-col'>
+                        <Flex className='mt-20' justify='space-between' gap={40}>
+                            <Col lg={12} className='flex flex-col'>
+                                <Title
+                                    className='w-1/2'
+                                    style={{
+                                        color: '#1b1b1b',
+                                        fontSize: '2.5rem',
+                                    }}
+                                >
+                                    Explore and spread Our Blog
+                                </Title>
+                                <Input.Search
+                                    placeholder='Enter your email'
+                                    enterButton='Subscribe'
+                                    size='large'
+                                    className='w-3/4'
+                                />
+                            </Col>
+                            <Col lg={8} className='flex flex-col'>
+                                <Paragraph className='text-gray-500 w-3/4'>
+                                    Follow our developments and the blogs we provide,
+                                    lots of interesting articles about finance and entertainment
+                                    too. Has been the industry's standard dummy text ever since
+                                    the 1500s, when an unknown printer took a galley of type and
+                                    scrambled it to make a type specimen book.
+                                </Paragraph>
+                                <Flex gap={20}>
+                                    <XOutlined className='text-xl text-gray-500' />
+                                    <FacebookFilled className='text-xl text-gray-500' />
+                                    <InstagramFilled className='text-xl text-gray-500' />
+                                </Flex>
+                            </Col>
+                        </Flex>
+                    </Row>
+                    <Row justify={"center"} className='mt-20 flex flex-col'>
+                        <Skeleton.Node style={{
+                            width: '100%',
+                            height: '300px',
+                            borderRadius: '12px',
+                        }} />
+                    </Row>
+                </Container>
+            </Styled.ContactSection>
+
+            <Styled.FooterSection>
+                <Container>
+                    <Row justify={"space-between"} className='gap-4 border-b border-gray-300 pb-16'>
+                        <Col lg={10} className='flex flex-col gap-4'>
+                            <Row justify={"start"} className='gap-4 items-center'>
+                                <Skeleton.Avatar size={32} />
+                                <Title level={3} className='text-gray-500 text-left'>
+                                    FiNex
+                                </Title>
+                            </Row>
+                            <Row>
+                                <Text className='text-gray-500 text-left'>
+                                    FiNex is a financial management platform that helps
+                                    you manage your finances more effectively and efficiently.
+                                    Our AI-powered tools provide insights and recommendations
+                                </Text>
+                            </Row>
+                            <Row>
+                                <Flex gap={12}>
+                                    <Styled.IconContainer>
+                                        <XOutlined className='text-sm text-white' />
+                                    </Styled.IconContainer>
+                                    <Styled.IconContainer>
+                                        <FacebookFilled className='text-sm text-white' />
+                                    </Styled.IconContainer>
+                                    <Styled.IconContainer>
+                                        <InstagramFilled className='text-sm text-white' />
+                                    </Styled.IconContainer>
+                                </Flex>
+                            </Row>
+                        </Col>
+                        <Col lg={10} className='flex flex-col'>
+                            <Row justify={"space-between"}>
+                                <Col className='flex flex-col gap-4'>
+                                    <Title level={4} className='text-gray-500 text-left'>
+                                        Company
+                                    </Title>
+                                    <Flex vertical gap={16}>
+                                        <Text className='text-gray-500 text-left'>About</Text>
+                                        <Text className='text-gray-500 text-left'>Blog</Text>
+                                        <Text className='text-gray-500 text-left'>Careers</Text>
+                                    </Flex>
+                                </Col>
+                                <Col className='flex flex-col gap-4'>
+                                    <Title level={4} className='text-gray-500 text-left'>
+                                        Support
+                                    </Title>
+                                    <Flex vertical gap={16}>
+                                        <Text className='text-gray-500 text-left'>Help Center</Text>
+                                        <Text className='text-gray-500 text-left'>Safety Center</Text>
+                                        <Text className='text-gray-500 text-left'>Community Guidelines</Text>
+                                    </Flex>
+                                </Col>
+                                <Col className='flex flex-col gap-4'>
+                                    <Title level={4} className='text-gray-500 text-left'>
+                                        Legal
+                                    </Title>
+                                    <Flex vertical gap={16}>
+                                        <Text className='text-gray-500 text-left'>Cookies Policy</Text>
+                                        <Text className='text-gray-500 text-left'>Privacy Policy</Text>
+                                        <Text className='text-gray-500 text-left'>Terms of Service</Text>
+                                    </Flex>
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
+                    <Row justify={"center"} className='mt-8'>
+                        <Flex gap={20}>
+                            <Text className='text-gray-500'>
+                                © Copyright 2025 FiNex. All rights reserved.
+                            </Text>
+                        </Flex>
+                    </Row>
+                </Container>
+            </Styled.FooterSection>
         </>
     )
 }

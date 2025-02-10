@@ -53,3 +53,22 @@ export const FeatureCardContents = [
         `
     }
 ];
+
+export const FeedbackContents = [
+    {
+        username: 'John Doe',
+        career: 'CEO, Company Inc.',
+        feedback: `
+            Finex has been a game changer for our business. We've been able to
+            manage our cash flow better and make more strategic financial decisions
+        `
+    },
+    {
+        username: 'Jane Doe',
+        career: 'CFO, Company Inc.',
+        feedback: `
+            Finex has been a game changer for our business. We've been able to
+            manage our cash flow better and make more strategic financial decisions
+        `
+    }
+]
