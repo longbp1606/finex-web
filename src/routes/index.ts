@@ -3,6 +3,7 @@ import MainRoutes from "./MainRoutes";
 import { useScrollToTop } from "@/hooks";
 import UserRoutes from "./UserRoutes";
 import AdminRoutes from "./AdminRoutes";
+import AuthRoutes from "./AuthRoutes";
 
 const RoutesComponent = () => {
     useScrollToTop();
@@ -10,7 +11,8 @@ const RoutesComponent = () => {
     return useRoutes([
         MainRoutes,
         UserRoutes,
-        AdminRoutes, 
+        AdminRoutes,
+        AuthRoutes, 
     ]);
 }
 

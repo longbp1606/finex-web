@@ -1,6 +1,8 @@
 const routes = {
   public: {
     home: "/",
+    login: '/login',
+    register: '/register',
   },
   user: {
     dashboard: '/user/dashboard',

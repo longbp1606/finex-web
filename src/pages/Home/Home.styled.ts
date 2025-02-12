@@ -1,56 +1,96 @@
+import { theme } from "@/themes";
+import { Button, Card, Col, List } from "antd";
 import styled from "styled-components";
 
-export const HomeWrapper = styled.div`
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
+const { Meta } = Card;
+
+export const IntroductionSection = styled.section`
+    margin-top: 24px;
+
+    & .ant-typography.intro-title {
+        font-size: 5rem;
+        font-weight: 500;
+        margin: 48px 0 16px 0; 
+
+        & mark {
+            font-size: 5rem;
+            font-weight: 500;    
+            color: ${theme.color.primary};
+            background-color: ${theme.color.secondary}
+        }
+    }
+
+    & .ant-typography.description {
+        font-size: 1.25rem;
+        font-weight: 400;
+        color: ${theme.color.textSecondary}
+    }
+`;
+
+export const Navbar = styled(List)`
+    & .ant-list-items {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        column-gap: 40px;
+    }
+`;
+
+export const CustomButton = styled(Button)`
+    border-bottom: 2px solid ${theme.color.primary};
+    border-radius: 0;
+`;
+
+export const CardContainer = styled(Col)`
+    background: linear-gradient(133deg, rgba(136,236,188,1) 0%, rgba(33,87,89,1) 100%);
+    border-radius: 12px;
+
+    & .ant-typography {
+        color: white;
+    }
+`;
+
+export const SupportSection = styled.section`
+    background: #f7f7f7;
+    margin-top: 64px;
+`;
+
+export const FeatureSection = styled.section`
+    margin-top: 24px;
+`;
+
+export const FeatureCardMeta = styled(Meta)`
+    & .ant-card-meta-title {
+        font-size: 1.5rem;
+        font-weight: 500;
+    }
+
+    & .ant-card-meta-description {
+        font-size: 1rem;
+        font-weight: 400;
+    }
+`;
+
+export const FeedbackSection = styled.section`
+    margin-top: 64px;
+`;
+
+export const ContactSection = styled.section`
+    margin-top: 64px;
+`;
+
+export const FooterSection = styled.footer`
+    padding: 24px 0;
     text-align: center;
+    margin-top: 64px;
+`;
 
-    & .logo {
-        height: 6em;
-        padding: 1.5em;
-        will-change: filter;
-        transition: filter 300ms;
-    }
-    & .logo:hover {
-        filter: drop-shadow(0 0 2em #646cffaa);
-    }
-    & .logo.react:hover {
-        filter: drop-shadow(0 0 2em #61dafbaa);
-    }
-
-    @keyframes logo-spin {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-        a:nth-of-type(2) .logo {
-            animation: logo-spin infinite 20s linear;
-        }
-    }
-
-    & .logo-container {
-        display: flex;
-        justify-content: center
-    }
-
-    & .card {
-        padding: 2em;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-
-        & button {
-            color: #fff
-        }
-    }
-
-    & .read-the-docs {
-        color: #888;
-    }
+export const IconContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    column-gap: 16px;
+    background: linear-gradient(133deg, rgba(136,236,188,1) 0%, rgba(33,87,89,1) 100%);
+    padding: 8px;
+    border-radius: 20px;
 `;
