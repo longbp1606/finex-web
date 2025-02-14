@@ -7,17 +7,38 @@
 }
 
 .revenueExpensesTotal {
-    border-bottom: 1px solid #E2E8F0;
+    /* border-bottom: 1px solid #E2E8F0; */
     border-radius: 8px;
     display: flex;
     justify-content: space-between;
-    padding: 0px 15px 10px 15px;
+    /* padding: 0px 15px 10px 15px; */
 }
 
 .moneyDetail {
     display: flex;
     justify-content: space-between;
     gap: 24px;
+}
+
+.summary-btn {
+    display: "flex";
+    flex-direction: column;
+    width: 300px;
+    padding: 10px 15px 15px 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #E2E8F0;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 8px;
+}
+
+.totalTitle {
+    font-weight: 600;
+}
+
+.totalAmount {
+    font-size: 23px;
+    font-weight: 600;
 }
 
 .revenue-btn {
@@ -51,9 +72,7 @@
     width: 150px;
 }
 
-
-/* Category Detail Modal */
-
-.ant-modal-content {
-    width: max-content;
+.search-filter {
+    display: flex;
+    justify-content: space-between;
 }
