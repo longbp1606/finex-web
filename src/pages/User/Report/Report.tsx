@@ -3,6 +3,7 @@ import { CategoryItem, Container, DetailButton, Header, Section, StyledSection, 
 import { moneyData, weekOptions, weekSeries, reportColumns, reportData } from "./data";
 import { Progress, Select } from "antd";
 import Chart from "react-apexcharts";
+import DetailReport from "./DetailReport";
 
 const months = Array.from({ length: 12 }, (_, i) => ({
     label: `${i + 1}/2025`,
@@ -27,14 +28,14 @@ const WeekChart: React.FC = () => (
     </Section>
 );
 
-const ReportTable: React.FC = () => {
+const ReportTable = ({ setShowDetail }: { setShowDetail: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const [selectedMonth, setSelectedMonth] = useState(months[0].value);
 
     return (
         <StyledSection>
             <Header>
                 <Select value={selectedMonth} onChange={setSelectedMonth} options={months} />
-                <DetailButton>Detail &gt;</DetailButton>
+                <DetailButton onClick={() => setShowDetail(true)}>Detail &gt;</DetailButton>
             </Header>
             <StyledTable columns={reportColumns} dataSource={reportData} pagination={false} />
         </StyledSection>
@@ -57,15 +58,25 @@ const TargetCategory: React.FC = () => (
     </Section>
 );
 
-const Report: React.FC = () => (
-    <Container>
-        <VerticalSection>
-            <MoneyCard />
-            <WeekChart />
-        </VerticalSection>
-        <ReportTable />
-        <TargetCategory />
-    </Container>
-);
+const Report: React.FC = () => {
+    const [showDetail, setShowDetail] = useState(false);
+
+    return (
+        <>
+            {showDetail ? (
+                <DetailReport setShowDetail={setShowDetail}/>
+            ) : (
+                <Container>
+                    <VerticalSection>
+                        <MoneyCard />
+                        <WeekChart />
+                    </VerticalSection>
+                    <ReportTable setShowDetail={setShowDetail} />
+                    <TargetCategory />
+                </Container>
+            )}
+        </>
+    )
+};
 
 export default Report;

@@ -1,15 +1,24 @@
-import { Flex, Segmented } from "antd"
+import { Button, Flex, Segmented } from "antd"
 import { useState } from "react"
 import DailyTab from "./component/Daily";
 import MonthlyTab from "./component/Monthly";
 import YearlyTab from "./component/Yearly";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
-const DetailReport = () => {
+const DetailReport = ({ setShowDetail }: { setShowDetail: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const [typeTab, setTypeTab] = useState<String>('daily');
 
     return (
         <>
             <Flex vertical gap={20}>
+                <Flex>
+                    <Button
+                        type="link"
+                        onClick={() => setShowDetail(false)}
+                    >
+                        <ArrowLeftOutlined/> Back
+                    </Button>
+                </Flex>
                 <Flex>
                     <Segmented<String>
                         options={[
