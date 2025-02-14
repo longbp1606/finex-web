@@ -14,11 +14,11 @@ const menuItems: MenuItemType[] = [
         label: 'Dashboard',
         icon: <MdOutlineCategory />,
     },
-    {
-        key: "systemCategory",
-        label: 'System Category',
-        icon: <MdOutlineCategory />,
-    },
+    // {
+    //     key: "systemCategory",
+    //     label: 'System Category',
+    //     icon: <MdOutlineCategory />,
+    // },
     {
         key: "account",
         label: 'Account',
