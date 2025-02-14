@@ -158,7 +158,7 @@ const Dashboard: React.FC = () => {
                     />
                   </ProgressBar>
                   <Footer>
-                    <Percentage>{(item.amount / item.income) * 100}% of your goal</Percentage>
+                    <Percentage>{((item.amount / item.income) * 100).toFixed(2)}% of your goal</Percentage>
                     <New>+{item.percentage}%</New>
                   </Footer>
                 </Content>
