@@ -1,3 +1,5 @@
+import { theme } from "@/themes";
+
 export const moneyData = [
     { amount: "$8,903", label: "This month's spending" },
     { amount: "$456", label: "Today's spending" },
@@ -8,7 +10,7 @@ export const weekOptions: ApexCharts.ApexOptions = {
     chart: { type: "line" },
     xaxis: { categories: ["Mon", "Tus", "Wed", "Thur", "Fri", "Sat", "Sun"] },
     stroke: { curve: "smooth" },
-    colors: ["#3B82F6", "#FACC15"],
+    colors: ["#2A776A", `${theme.color.secondary}`],
 };
 
 export const weekSeries: ApexAxisChartSeries = [
@@ -35,10 +37,4 @@ export const reportData = [
     { key: "8", name: "Paid electricity bill", time: "2024-02-08", amount: 600, balance: -350, category: "Utilities" },
     { key: "9", name: "Movie tickets", time: "2024-02-09", amount: 250, balance: -600, category: "Entertainment" },
     { key: "10", name: "Lunch at cafe", time: "2024-02-10", amount: 300, balance: -900, category: "Food" },
-    { key: "11", name: "Online course", time: "2024-02-11", amount: 500, balance: -1400, category: "Education" },
-    { key: "12", name: "Gas for car", time: "2024-02-12", amount: 400, balance: -1800, category: "Transport" },
-    { key: "13", name: "Bought a smartwatch", time: "2024-02-13", amount: 1500, balance: -3300, category: "Electronics" },
-    { key: "14", name: "Monthly rent", time: "2024-02-14", amount: 3000, balance: -6300, category: "Housing" },
-    { key: "15", name: "Weekend trip", time: "2024-02-15", amount: 2000, balance: -8300, category: "Travel" },
-    { key: "16", name: "Charity donation", time: "2024-02-16", amount: 600, balance: -8900, category: "Charity" },
 ];
