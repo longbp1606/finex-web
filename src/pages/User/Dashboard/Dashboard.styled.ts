@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Card, Table } from "antd";
+import { theme } from "@/themes";
 
 export const DashboardContainer = styled.div`
   display: flex;
@@ -11,7 +12,7 @@ export const Section = styled(Card) <{ negative?: boolean }>`
   flex: 1;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  background: #f9f9fc;
+  background: ${theme.color.quinary};
   padding: 16px;
 
   .ant-card-body {
@@ -20,9 +21,14 @@ export const Section = styled(Card) <{ negative?: boolean }>`
     gap: 6px;
   }
 
+  .ant-card-head-title {
+    color: #666;
+  }
+
   .title {
     font-size: 16px;
     color: #666;
+    font-weight: 500;
   }
 
   .balance-container {
@@ -34,7 +40,7 @@ export const Section = styled(Card) <{ negative?: boolean }>`
   .balance-value {
     font-size: 28px;
     font-weight: bold;
-    color: #1a237e;
+    color: ${theme.color.primary};
   }
 
   .percentage-change {
@@ -141,14 +147,15 @@ export const Content = styled.div`
 `;
 
 export const Title = styled.div`
-  font-size: 14px;
-  color: #888;
+  font-size: 15px;
+  color: #666;
+  font-weight: 500;
 `;
 
 export const Amount = styled.div`
   font-size: 16px;
   font-weight: bold;
-  color: #0a0a0a;
+  color: ${theme.color.primary};
 `;
 
 export const ProgressBar = styled.div`
@@ -164,13 +171,13 @@ export const Footer = styled.div`
 
 export const Percentage = styled.div`
   font-size: 12px;
-  color: #666;
+  color: #9096b2;
 `;
 
 export const New = styled.div`
   font-size: 12px;
   font-weight: bold;
-  color: #007bff;
+  color: #4caf50;
 `;
 
 export const TransactionContainer = styled.div`

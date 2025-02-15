@@ -1,5 +1,24 @@
 const PRIMARY_COLOR: string = '#18453E';
 const SECONDARY_COLOR: string = '#BCF49D';
+const TERTIARY_COLOR: string = '#C3CFC4';
+const QUATERNARY_COLOR: string = '#E3F3DA';
+const QUINARY_COLOR: string = '#FAFAFB';
+const SENARY_COLOR: string = '#F2F4F2';
+
+//Note:
+// #A8B2A8 (Đậm hơn #C3CFC4)
+// #B0D1A2 (Đậm hơn #E3F3DA)
+// #D0D4D0 (Đậm hơn #F2F4F2)
+// #E0E1E5 (Đậm hơn #FAFAFB)
+// #8D9A8D (Thay thế #C3CFC4)
+// #94B57F (Thay thế #E3F3DA)
+// #ACB0AC (Thay thế #F2F4F2)
+// #C8C9CC (Thay thế #FAFAFB)
+// #206156 (Nhạt hơn một chút)
+// #2A776A (Nhạt hơn nữa)
+// #3B8D80 (Màu trung gian, dễ nhìn)
+// #5CA89B (Nhẹ nhàng hơn)
+// #7EC3B5 (Rất nhạt, gần pastel)
 
 export const theme = {
     light: '',
@@ -7,6 +26,10 @@ export const theme = {
     color: {
         primary: PRIMARY_COLOR,
         secondary: SECONDARY_COLOR,
+        tertiary: TERTIARY_COLOR,
+        quaternary: QUATERNARY_COLOR,
+        quinary : QUINARY_COLOR,
+        senary : SENARY_COLOR,
         facebook: '#1877F2',
         info: '#1677FF',
         warning: '#FAAD14',

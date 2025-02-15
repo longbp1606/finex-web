@@ -34,6 +34,7 @@ import {
   categoryBalanceData,
   transactions,
 } from "./data";
+import { theme } from "@/themes";
 
 const Dashboard: React.FC = () => {
   return (
@@ -79,7 +80,7 @@ const Dashboard: React.FC = () => {
               options={{
                 chart: { id: "overview-chart" },
                 xaxis: { categories: overviewData.map((d) => d.month) },
-                colors: ["#0A0E7A", "#36A2EB"],
+                colors: ["#2A776A", `${theme.color.secondary}`],
                 legend: {
                   position: "bottom",
                   markers: { size: 8 }
@@ -101,7 +102,7 @@ const Dashboard: React.FC = () => {
                 type="donut"
                 options={{
                   labels: categoryData.map((d) => d.label),
-                  colors: ["#0A0E7A", "#36A2EB", "#1234A1", "#2551C4"],
+                  colors: ["#2A776A", `${theme.color.secondary}`, "#B0D1A2", `${theme.color.tertiary}`],
                   legend: { show: false },
                   dataLabels: { enabled: false },
                 }}
@@ -114,7 +115,7 @@ const Dashboard: React.FC = () => {
                       <LegendText>
                         <div
                           style={{
-                            color: ["#0A0E7A", "#36A2EB", "#1234A1", "#2551C4"][index],
+                            color: ["#2A776A", `${theme.color.secondary}`, "#B0D1A2", `${theme.color.tertiary}`][index],
                             fontWeight: "bold",
                             fontSize: "18px",
                           }}
@@ -143,7 +144,7 @@ const Dashboard: React.FC = () => {
                   padding: "10px",
                   borderRadius: "10px"
                 }}>
-                  <MoneyCollectOutlined style={{ fontSize: "36px", color: '#18453E' }} />
+                  <MoneyCollectOutlined style={{ fontSize: "36px", color: `${theme.color.primary}` }} />
                 </IconWrapper>
                 <Content>
                   <Title>{item.label}</Title>
@@ -153,12 +154,12 @@ const Dashboard: React.FC = () => {
                   <ProgressBar>
                     <Progress
                       percent={(item.amount / item.income) * 100}
-                      strokeColor={index === 0 ? "#58a6ff" : "#001F5C"}
+                      strokeColor={index === 0 ? `${theme.color.secondary}` : "#2A776A"}
                       showInfo={false}
                     />
                   </ProgressBar>
                   <Footer>
-                    <Percentage>{((item.amount / item.income) * 100).toFixed(2)}% of your goal</Percentage>
+                    <Percentage>{((item.amount / item.income) * 100).toFixed(2)}% of your target</Percentage>
                     <New>+{item.percentage}%</New>
                   </Footer>
                 </Content>
