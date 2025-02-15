@@ -63,7 +63,7 @@ const UserLayout = () => {
                     </Styled.ContentContainer>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
-                    FiNex ©{new Date().getFullYear()} Created by Dunno Gang
+                    FiNex ©{new Date().getFullYear()} Created by LTLN Gang
                 </Footer>
             </Layout>
         </Layout>
