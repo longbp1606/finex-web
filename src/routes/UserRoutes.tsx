@@ -12,10 +12,10 @@ const UserRouter = () => {
 
 const userRoutes = {
     children: [
-        { path: config.routes.user.dashboard, element: <Dashboard /> },
-        { path: config.routes.user.transaction, element: <Transaction /> },
+        { path: config.routes.user.budget, element: <Transaction /> },
         { path: config.routes.user.category, element: <Category /> },
-        { path: config.routes.user.report, element: <Report /> },
+        { path: config.routes.user.transaction, element: <Report /> },
+        { path: config.routes.user.report, element: <Dashboard /> },
         { path: config.routes.user.alert, element: <Alert /> },
     ]
 };
