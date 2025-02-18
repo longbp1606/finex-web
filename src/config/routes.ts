@@ -5,10 +5,9 @@ const routes = {
     register: '/register',
   },
   user: {
-    dashboard: '/user/dashboard',
-    transaction: '/user/transaction',
-    transactionDetails: '/user/transaction/:id',
+    budget: '/user/budget',
     category: '/user/category',
+    transaction: '/user/transaction',
     report: '/user/report',
     alert: '/user/alert',
     userAccount: '/admin/user-account',

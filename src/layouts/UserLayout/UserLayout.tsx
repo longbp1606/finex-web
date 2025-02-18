@@ -12,10 +12,10 @@ const { Header, Content, Footer, Sider } = Layout;
 const { Title } = Typography;
 
 const menuItems: MenuItemType[] = [
-    { key: "dashboard", label: 'Dashboard', icon: <MdOutlineDashboard /> },
-    { key: "transaction", label: 'Transaction', icon: <MdGridOn /> },
+    { key: "budget", label: 'Budget', icon: <MdGridOn /> },
     { key: "category", label: 'Category', icon: <SiGoogleanalytics /> },
-    { key: "report", label: 'Report', icon: <BsRecordBtn /> },
+    { key: "transaction", label: 'Transaction', icon: <BsRecordBtn /> },
+    { key: "report", label: 'Report', icon: <MdOutlineDashboard /> },
     { key: "alert", label: 'Alert', icon: <MdCategory /> },
 ];
 
