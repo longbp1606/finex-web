@@ -6,6 +6,7 @@ const routes = {
   },
   user: {
     budget: '/user/budget',
+    budgetDetail: '/user/budget/:id',
     category: '/user/category',
     transaction: '/user/transaction',
     report: '/user/report',
