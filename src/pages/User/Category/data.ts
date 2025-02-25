@@ -3,45 +3,56 @@ import Food from "@/assets/icon3D/food.jpg";
 import Housing from "@/assets/icon3D/housing.jpg";
 import Transportation from "@/assets/icon3D/transportation.jpg";
 export interface CategoryItem {
-  id: string;
-  title: string;
+  id: string; 
+  categoryName: string;
   description: string;
-  image: string;
+  currencyUnit: "USD" | "VND";
   target: number;
   balance: number;
+  backgroundImage: string; 
+  accentColor: string; 
 }
+
 
 export const categories: CategoryItem[] = [
   {
     id: "1",
-    title: "Food & Dining",
+    categoryName: "Food & Dining",
     description: "Expenses for groceries, restaurants, cafes, fast food, and market shopping.",
-    image: Food,
-    target: 2000.000,
-    balance: 300.000,
+    backgroundImage: Food,
+    currencyUnit: "USD",
+    target: 2000.0,
+    balance: 300.0,
+    accentColor: "#ffffff",
   },
   {
     id: "2",
-    title: "Transportation",
+    categoryName: "Transportation",
     description: "Includes fuel, bus tickets, taxi, Grab, toll fees, and vehicle maintenance.",
-    image: Transportation,
-    target: 200000.000,
-    balance: 3000.000,
+    backgroundImage: Transportation,
+    currencyUnit: "USD",
+    target: 200000.0,
+    balance: 3000.0,
+    accentColor: "#f2ced8",
   },
   {
     id: "3",
-    title: "Housing",
+    categoryName: "Housing",
     description: "Rent, electricity, water, internet, repairs, and home maintenance costs.",
-    image: Housing,
-    target: 2000.000,
-    balance: 300.000,
+    backgroundImage: Housing,
+    currencyUnit: "USD",
+    target: 2000.0,
+    balance: 300.0,
+    accentColor: "#eaf2e7",
   },
   {
     id: "4",
-    title: "Shopping",
+    categoryName: "Shopping",
     description: "Purchases of clothing, footwear, cosmetics, household items, and electronics.",
-    image: Shopping,
-    target: 2000.000,
-    balance: 300.000,
+    backgroundImage: Shopping,
+    currencyUnit: "USD",
+    target: 2000.0,
+    balance: 300.0,
+    accentColor: "#d1eeff",
   },
 ];

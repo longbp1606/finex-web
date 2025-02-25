@@ -81,7 +81,7 @@ export const UploadContainer = styled(Upload)`
 
 export const AccentColorContainer = styled.div`
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
   margin-left: auto;
 `;
@@ -93,26 +93,20 @@ export const AccentColorSection = styled.div`
 `;
 
 export const ColorCircle = styled.div<{ color: string; selected: boolean }>`
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background-color: ${(props) => props.color};
-  border: ${(props) => (props.selected ? "2px solid black" : "none")};
+  background-color: ${({ color }) => color};
+  border: ${({ selected }) => (selected ? "2px solid black" : "2px solid #a67c52")};
+  opacity: ${({ selected }) => (selected ? "1" : "0.5")}; 
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    opacity: 1;
+  }
 `;
 
-export const SetDefaultContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-export const SetDefaultSection = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-`;
 export const ColSection = styled.div`
     display: flex;
     flex-direction: column;

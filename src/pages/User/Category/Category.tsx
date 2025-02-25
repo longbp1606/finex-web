@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { message } from "antd";
 import { EditOutlined, EyeOutlined, EyeInvisibleOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import { categories as initialCategories } from "./data";
+import { CategoryItem, categories as initialCategories } from "./data";
 
 import {
   Container,
@@ -26,6 +26,7 @@ import {
 } from "./Category.styled";
 import ConfirmDeleteModal from "@/components/DeleteModal/ConfirmDeleteModal";
 import CategoryModal from "@/components/CategoryModal/CategoryModal";
+import EditCategoryModal from "@/components/EditCategoryModal/EditCategoryModal";
 
 const Category: React.FC = () => {
   const [categoriesList, setCategoriesList] = useState(initialCategories);
@@ -37,7 +38,8 @@ const Category: React.FC = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
 
   const [addModalVisible, setAddModalVisible] = useState(false);
-
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [categoryToEdit, setCategoryToEdit] = useState<CategoryItem | null>(null);
 
   // Hiển thị modal confirm
   const showDeleteConfirm = (categoryId: string) => {
@@ -49,6 +51,7 @@ const Category: React.FC = () => {
   const handleDeleteCategory = () => {
     if (selectedCategoryId) {
       setCategoriesList((prev) => prev.filter((category) => category.id !== selectedCategoryId));
+      setVisibleBalances((prev) => prev.filter((_, i) => categoriesList[i].id !== selectedCategoryId));
       message.success("Category deleted successfully!");
     }
     setIsModalVisible(false);
@@ -61,18 +64,33 @@ const Category: React.FC = () => {
     setSelectedCategoryId(null);
   };
 
+  // Thêm category mới
+  const handleAddCategory = (newCategory: CategoryItem) => {
+    setCategoriesList((prev) => [...prev, newCategory]);
+    setVisibleBalances((prev) => [...prev, false]);
+    message.success("Category added successfully!");
+  };
+
+  // Chỉnh sửa category
+  const handleEditCategory = (updatedCategory: CategoryItem) => {
+    setCategoriesList((prev) =>
+      prev.map((category) => (category.id === updatedCategory.id ? updatedCategory : category))
+    );
+    message.success("Category updated successfully!");
+  };
+
   // Lọc categories theo search term
   let filteredCategories = categoriesList.filter((category) =>
-    category.title.toLowerCase().includes(searchTerm.toLowerCase())
+    category.categoryName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Sắp xếp categories
   switch (sortOption) {
     case "name-asc":
-      filteredCategories.sort((a, b) => a.title.localeCompare(b.title));
+      filteredCategories.sort((a, b) => a.categoryName.localeCompare(b.categoryName));
       break;
     case "name-desc":
-      filteredCategories.sort((a, b) => b.title.localeCompare(a.title));
+      filteredCategories.sort((a, b) => b.categoryName.localeCompare(a.categoryName));
       break;
     case "target-desc":
       filteredCategories.sort((a, b) => b.target - a.target);
@@ -127,16 +145,16 @@ const Category: React.FC = () => {
 
         {/* Các card hiển thị bình thường */}
         {filteredCategories.map((category, index) => (
-          <Card key={category.id} hoverable>
+          <Card key={category.id} hoverable style={{ backgroundColor: category.accentColor }}>
             <DeleteIcon onClick={() => showDeleteConfirm(category.id)}>
               <DeleteOutlined />
             </DeleteIcon>
-            <img src={category.image} alt={category.title} />
+            <img src={category.backgroundImage} alt={category.categoryName} />
             <CardContent>
-              <CardTitle>{category.title}</CardTitle>
+              <CardTitle>{category.categoryName}</CardTitle>
               <CardDescription>{category.description}</CardDescription>
               <Target>
-                Target: <span>${category.target.toFixed(2)}</span>
+                Target: <span>${category.target.toFixed(2)} {category.currencyUnit}</span>
               </Target>
               <BalanceContainer>
                 <span>Balance:</span>
@@ -145,12 +163,15 @@ const Category: React.FC = () => {
                 </EyeIcon>
                 <BalanceAmount>
                   {visibleBalances[index]
-                    ? `$${category.balance.toFixed(2)}`
-                    : "*".repeat(category.balance.toFixed(0).length)}
+                    ? `$${category.balance.toFixed(2)} ${category.currencyUnit}`
+                    : "*".repeat(category.balance.toFixed(0).length) + ` ${category.currencyUnit}`}
                 </BalanceAmount>
               </BalanceContainer>
             </CardContent>
-            <EditButton>
+            <EditButton onClick={() => {
+              setCategoryToEdit(category);
+              setEditModalVisible(true);
+            }}>
               <EditOutlined />
             </EditButton>
           </Card>
@@ -164,9 +185,14 @@ const Category: React.FC = () => {
         onCancel={handleCancelDelete}
       />
       <CategoryModal
-        visible={addModalVisible} onClose={() => setAddModalVisible(false)}
-      >
-      </CategoryModal>
+        visible={addModalVisible} onClose={() => setAddModalVisible(false)} onAddCategory={handleAddCategory}
+      />
+      <EditCategoryModal
+        visible={editModalVisible}
+        onClose={() => setEditModalVisible(false)}
+        onEditCategory={handleEditCategory}
+        category={categoryToEdit}
+      />
     </Container>
   );
 };
