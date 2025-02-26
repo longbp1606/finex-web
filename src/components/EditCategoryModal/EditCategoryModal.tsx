@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Select, Input, Space } from "antd";
 import Theme1 from "@/assets/icon3D/theme1.jpg";
 import Theme2 from "@/assets/icon3D/theme2.jpg";
@@ -16,19 +16,20 @@ import {
     ColSection,
     RowSection,
     UploadContainer,
-} from "./CategoryModal.styled";
+} from "../CategoryModal/CategoryModal.styled";
 import { UploadChangeParam, UploadFile } from "antd/es/upload";
 import { CategoryItem } from "@/pages/User/Category/data";
 
 const { Option } = Select;
 
-interface CategoryModalProps {
+interface EditCategoryModalProps {
     visible: boolean;
     onClose: () => void;
-    onAddCategory: (newCategory: CategoryItem) => void;
+    onEditCategory: (updatedCategory: CategoryItem) => void;
+    category: CategoryItem | null;
 }
 
-const CategoryModal: React.FC<CategoryModalProps> = ({ visible, onClose, onAddCategory }) => {
+const EditCategoryModal: React.FC<EditCategoryModalProps> = ({ visible, onClose, onEditCategory, category }) => {
     const [selectedTheme, setSelectedTheme] = useState("null");
     const [accentColor, setAccentColor] = useState("#ff9800");
     const [categoryName, setCategoryName] = useState("");
@@ -39,6 +40,17 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ visible, onClose, onAddCa
     const [uploadedImage, setUploadedImage] = useState<string | null>(null);
     const [backgroundImage, setBackgroundImage] = useState<string>(Theme1);
 
+    useEffect(() => {
+        if (category) {
+            setCategoryName(category.categoryName);
+            setDescription(category.description);
+            setTotalMoney(category.target.toString());
+            setCurrencyUnit(category.currencyUnit);
+            setBackgroundImage(category.backgroundImage);
+            setAccentColor(category.accentColor);
+        }
+    }, [category]);
+
     const handleUpload = (info: UploadChangeParam<UploadFile>) => {
         if (info.file.status === "done") {
             const url = URL.createObjectURL(info.file.originFileObj as Blob);
@@ -48,20 +60,22 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ visible, onClose, onAddCa
         }
     };
 
-    const handleAddCategory = () => {
+    const handleEditCategory = () => {
+        if (!category) return;
+
         const targetAmount = parseFloat(totalMoney) || 0;
-        const newCategory: CategoryItem = {
-            id: crypto.randomUUID(),
+        const updatedCategory: CategoryItem = {
+            ...category,
             categoryName,
             description,
             backgroundImage,
             accentColor,
             currencyUnit,
             target: targetAmount,
-            balance: targetAmount, // Set balance equal to target
+            balance: category.balance, // Keep the existing balance
         };
 
-        onAddCategory(newCategory);
+        onEditCategory(updatedCategory);
         onClose();
     };
 
@@ -72,14 +86,14 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ visible, onClose, onAddCa
 
     //reset
     const handleReset = () => {
-        setCategoryName("");
-        setDescription("");
-        setTotalMoney("");
-        setSelectedTheme("");
-        setUploadedImage(null);
-        setAccentColor("#ff9800");
-        setBackgroundImage(Theme1);
-        setCurrencyUnit("USD");
+        if (category) {
+            setCategoryName(category.categoryName);
+            setDescription(category.description);
+            setTotalMoney(category.target.toString());
+            setCurrencyUnit(category.currencyUnit);
+            setBackgroundImage(category.backgroundImage);
+            setAccentColor(category.accentColor);
+        }
     };
 
     return (
@@ -185,7 +199,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ visible, onClose, onAddCa
                             handleReset();
                             onClose();
                         }}>Cancel</Button>
-                        <Button type="primary" onClick={handleAddCategory}>Add</Button>
+                        <Button type="primary" onClick={handleEditCategory}>Save</Button>
                     </Space>
                 </FooterContainer>
             </ModalContainer>
@@ -193,4 +207,4 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ visible, onClose, onAddCa
     );
 };
 
-export default CategoryModal;
+export default EditCategoryModal;
