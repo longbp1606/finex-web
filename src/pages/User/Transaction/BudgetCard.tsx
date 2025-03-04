@@ -7,10 +7,8 @@ import { message } from "antd";
 import BudgetModal from "@/components/BudgetModal/BudgetModal";
 import ConfirmDeleteModal from "@/components/DeleteModal/ConfirmDeleteModal";
 import { budgets } from "./data";
-import { Link } from "react-router-dom";
 
-
-const Budget = () => {
+const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) => {
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [budgetsList, setBudgetsList] = useState(budgets);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -101,6 +99,7 @@ const Budget = () => {
         {filteredCategories.map((category: any, index: number) => (
           <Card key={category.id} hoverable             
           style={{ backgroundColor: backgroundColors[index % backgroundColors.length] }}
+          onClick={() => onSelectBudget(category.id)} // Gọi hàm cập nhật selectedBudgetId
             >
             <CardHeader>
               <CreateDate>{category.date}</CreateDate>
@@ -116,8 +115,12 @@ const Budget = () => {
             </CardMeta>
             <CardFooter>
               {/* <span>${category.target}</span> */}
-              <Link to={`/user/budget/${category.id}`}>
-              <DetailButton>Details</DetailButton></Link>
+              <DetailButton onClick={(e) => {
+              e.stopPropagation(); // Ngăn chặn onClick của Card
+              onSelectBudget(category.id);
+            }}>
+              Details
+            </DetailButton>
             </CardFooter>
           </Card>
         ))}

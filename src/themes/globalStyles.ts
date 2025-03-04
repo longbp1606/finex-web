@@ -53,6 +53,23 @@ const GlobalStyles = createGlobalStyle`
     button:focus-visible {
         outline: 4px auto -webkit-focus-ring-color;
     }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+        border-radius: 0;
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background-color: rgba(0, 0, 0, 0.15);
+    }
+
+    ::-webkit-scrollbar-track {
+        border-radius: 0;
+        background-color: rgba(0, 0, 0, 0);
+    }
 `;
 
 export default GlobalStyles;
