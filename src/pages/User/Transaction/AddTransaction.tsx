@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useParams } from "react-router-dom";
 import { FC, useState } from "react";
 import { budgets } from "./data"; // Import danh sách ngân sách
 import { Button, Input, Table, Modal } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { TransactionHeader, TransactionHeader_Title } from "./Budget.styled";
 
-const AddTransaction: FC = () => {
-  const { id } = useParams<{ id: string }>();
+const AddTransaction: FC<{ id: string; onBack: () => void }> = ({ id, onBack }) => {
+  // const { id } = useParams<{ id: string }>();
   const budget = budgets.find((b) => b.id === id);
 
   const [transactions, setTransactions] = useState(budget?.transaction || []);
@@ -62,6 +61,8 @@ const AddTransaction: FC = () => {
     <div className="transaction-detail">
       {/* Header với nút Add */}
       <TransactionHeader className="transaction-header">
+      <Button type="default" onClick={onBack}>🔙 Back</Button>
+
         <TransactionHeader_Title>Transaction List</TransactionHeader_Title>
         <Button type="primary" onClick={() => setIsModalOpen(true)}>
           Add new transaction
