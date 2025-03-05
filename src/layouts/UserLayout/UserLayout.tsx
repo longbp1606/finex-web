@@ -49,21 +49,22 @@ const UserLayout = () => {
                     />
                 </Sider>
                 <Layout>
-                    <Header className='p-0 bg-white flex items-center px-4'>
-                        {/* Button Toggle Sidebar */}
-                        <Button
-                            type="text"
-                            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                            onClick={() => setCollapsed(!collapsed)}
-                            style={{ fontSize: "16px", width: 64, height: 64 }}
-                        />
-                        <Title level={4} className="ml-5" style={{ marginBottom: "0px" }}>
+                    <Header className="p-0 bg-white flex items-center px-4 justify-between">
+                        <div className="flex items-center">
+                            <Button
+                                type="text"
+                                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                                onClick={() => setCollapsed(!collapsed)}
+                                style={{ fontSize: "16px", width: 64, height: 64 }}
+                                />
+                            <Title level={4} className="ml-5" style={{  marginBottom: "0px"  }}>
                             {selectedMenuLabel}
                         </Title>
                     </div>
 
                     <Notification />
-                </Header>
+                    </Header>
+
                     <Content style={{ margin: '16px' }}>
                         <Styled.ContentContainer>
                             <Outlet />
