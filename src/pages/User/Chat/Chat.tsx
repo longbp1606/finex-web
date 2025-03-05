@@ -17,13 +17,14 @@ const Chat = () => {
     const [loading, setLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-    const handleSendMessage = async () => {
-        if (!input.trim()) return;
+    const handleSendMessage = async (message: string) => {
+        if (!message.trim()) return;
 
-        const newMessages = [...messages, { role: 'user', content: input }];
+        const newMessages = [...messages, { role: 'user', content: message }];
         dispatch(setMessages(newMessages));
         // setMessages(newMessages);
         setLoading(true);
+        setInput('');
 
         try {
             const response = await generateChat(newMessages);
@@ -34,13 +35,12 @@ const Chat = () => {
             console.error("Error: ", error);
         }
         setLoading(false);
-        setInput('');
     }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             event.preventDefault();
-            handleSendMessage();
+            handleSendMessage(input);
         }
     };
 
@@ -113,7 +113,7 @@ const Chat = () => {
                         type="primary"
                         shape="circle"
                         icon={<BsSendFill />}
-                        onClick={handleSendMessage}
+                        onClick={() => handleSendMessage(input)}
                     />
                 </Flex>
             </Flex>
