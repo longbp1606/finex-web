@@ -10,7 +10,6 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import Notification from '@/components/Notification/Notification';
 import ChatAI from '@/components/ChatAI';
 
-
 const { Header, Content, Footer, Sider } = Layout;
 const { Title } = Typography;
 
