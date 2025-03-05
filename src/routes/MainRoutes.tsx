@@ -1,5 +1,6 @@
 import config from '@/config';
 import MainLayout from '@/layouts/MainLayout';
+import NotFound from '@/pages/404';
 import Home from '@/pages/Home';
 
 const MainRouter = () => {
@@ -12,10 +13,12 @@ const publicRoutes = {
     ]
 };
 
+const notFoundRoutes = { path: '*', element: <NotFound /> };
+
 const MainRoutes = {
     path: '/',
     element: <MainRouter />,
-    children: [publicRoutes],
+    children: [publicRoutes, notFoundRoutes],
 };
 
 export default MainRoutes;

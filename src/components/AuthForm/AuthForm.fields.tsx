@@ -11,6 +11,7 @@ export type FieldType = {
     rules: Rule[];
     children: JSX.Element;
     initialValue?: string;
+    halfWidth?: boolean;
 };
 
 const validateWhitespace = (_: unknown, value: string) => {
@@ -46,9 +47,9 @@ export const loginFields: FieldType[] = [
             {
                 required: true,
                 max: 16,
-                pattern: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,16}$/,
+                pattern: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,16}$/,
                 message:
-                    'Must be 8 to 16 characters, including one number, one uppercase letter, and one lowercase letter.',
+                    'Must be 6 to 16 characters, including one number, one uppercase letter, one special letter and one lowercase letter.',
             },
         ],
         children: (
@@ -65,6 +66,42 @@ export const loginFields: FieldType[] = [
 export const registerFields: FieldType[] = [
     {
         key: 1,
+        label: 'First name',
+        name: 'fname',
+        rules: [
+            {
+                required: true,
+                min: 2,
+                max: 50,
+                message: 'Please enter your first name between 2 and 50 characters.',
+            },
+            {
+                validator: validateWhitespace,
+            },
+        ],
+        children: <Input placeholder=" " />,
+        halfWidth: true,
+    },
+    {
+        key: 2,
+        label: 'Last name',
+        name: 'lname',
+        rules: [
+            {
+                required: true,
+                min: 2,
+                max: 50,
+                message: 'Please enter your first name between 2 and 50 characters.',
+            },
+            {
+                validator: validateWhitespace,
+            },
+        ],
+        children: <Input placeholder=" " />,
+        halfWidth: true,
+    },
+    {
+        key: 3,
         label: 'Email',
         name: 'email',
         rules: [
@@ -81,26 +118,9 @@ export const registerFields: FieldType[] = [
         children: <Input placeholder=" " />,
     },
     {
-        key: 2,
-        label: 'Fullname',
-        name: 'fullName',
-        rules: [
-            {
-                required: true,
-                min: 2,
-                max: 50,
-                message: 'Please enter your first and last name between 2 and 50 characters.',
-            },
-            {
-                validator: validateWhitespace,
-            },
-        ],
-        children: <Input placeholder=" " />,
-    },
-    {
-        key: 3,
+        key: 4,
         label: 'Phone number',
-        name: 'phoneNumber',
+        name: 'phone',
         rules: [
             {
                 required: true,
@@ -111,7 +131,7 @@ export const registerFields: FieldType[] = [
         children: <Input placeholder=" " />,
     },
     {
-        key: 4,
+        key: 5,
         label: 'Password',
         name: 'password',
         rules: [

@@ -1,24 +1,27 @@
 import * as Styled from './UserLayout.styled';
-import { Button, Layout, Menu, Typography } from "antd";
+import { Avatar, Button, Flex, Layout, Menu, Typography } from "antd";
 import { MenuItemType } from "antd/es/menu/interface";
-import { useState } from "react";
-import { MdCategory, MdGridOn, MdOutlineDashboard } from "react-icons/md";
+import { useEffect, useState } from "react";
+import { MdCategory, MdGridOn, MdLogout } from "react-icons/md";
 import { Outlet, useNavigate } from "react-router-dom";
 import { SiGoogleanalytics } from "react-icons/si";
-import { BsChatDots, BsRecordBtn } from "react-icons/bs";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import { BsChatDots } from "react-icons/bs";
+import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from '@ant-design/icons';
 import Notification from '@/components/Notification/Notification';
 import ChatAI from '@/components/ChatAI';
+import { getProfile, ProfileType } from '@/services/authAPI';
+import cookieUtils from '@/services/cookieUtils';
+import config from '@/config';
 
 const { Header, Content, Footer, Sider } = Layout;
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const menuItems: MenuItemType[] = [
     { key: "budget", label: 'Budget', icon: <MdGridOn /> },
-    { key: "category", label: 'Category', icon: <SiGoogleanalytics /> },
-    { key: "transaction", label: 'Transaction', icon: <BsRecordBtn /> },
-    { key: "report", label: 'Report', icon: <MdOutlineDashboard /> },
-    { key: "alert", label: 'Alert', icon: <MdCategory /> },
+    { key: "category", label: 'Category', icon: <MdCategory /> },
+    { key: "analysis", label: 'Analysis', icon: <SiGoogleanalytics /> },
+    // { key: "report", label: 'Report', icon: <MdOutlineDashboard /> },
+    // { key: "alert", label: 'Alert', icon: <MdCategory /> },
     { key: "chat", label: 'Chat', icon: <BsChatDots /> },
 ];
 
@@ -27,27 +30,57 @@ const UserLayout = () => {
     const keys = location.pathname.split("/user");
     const [collapsed, setCollapsed] = useState(false);
     const [selectedMenuLabel, setSelectedMenuLabel] = useState(
-        menuItems.find(item => item.key === keys[1])?.label || "Dashboard"
+        menuItems.find(item => item.key === keys[1])?.label || "Budget"
     );
+    const [profile, setProfile] = useState<ProfileType>();
 
     // Xử lý khi chọn menu
     const handleMenuSelect = (e: { key: string }) => {
         const selectedItem = menuItems.find(item => item.key === e.key);
-        setSelectedMenuLabel(selectedItem?.label || "Dashboard");
+        setSelectedMenuLabel(selectedItem?.label || "Budget");
         navigate(`/user/${e.key}`);
     };
+
+    const fetchProfile = async () => {
+        try {
+            const response = await getProfile();
+
+            if (!response.data) throw response.data;
+            else {
+                setProfile(response.data.data);
+            }
+        } catch (error: any) {
+            console.error("Error: ", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchProfile();
+    }, []);
 
     return (
         <>
             <Layout className="min-h-screen">
                 <Sider collapsible collapsed={collapsed} className='bg-[#ecf4e9]' trigger={null}>
-                    <div className="demo-logo-vertical" />
-                    <Menu
-                        items={menuItems}
-                        selectedKeys={[keys[1]]}
-                        onSelect={handleMenuSelect}
-                        className='bg-[#ecf4e9]'
-                    />
+                    <Flex vertical className='h-full justify-between'>
+                        <Menu
+                            items={menuItems}
+                            selectedKeys={[keys[1]]}
+                            onSelect={handleMenuSelect}
+                            className='bg-[#ecf4e9]'
+                        />
+                        <Button
+                            type='primary'
+                            danger
+                            onClick={() => {
+                                cookieUtils.clear();
+                                navigate(config.routes.public.login);
+                            }}
+                            style={{ padding: 20 }}
+                        >
+                            <MdLogout size={20} /> Logout
+                        </Button>
+                    </Flex>
                 </Sider>
                 <Layout>
                     <Header className="p-0 bg-white flex items-center px-4 justify-between">
@@ -63,7 +96,14 @@ const UserLayout = () => {
                             </Title>
                         </div>
 
-                        <Notification />
+                        <Flex gap={20} align='center'>
+                            <Notification />
+                            <Text className='w-24 text-right'>
+                                {`Welcome back, \n`}
+                                <strong>{profile?.fname} {profile?.lname}</strong>
+                            </Text>
+                            <Avatar icon={<UserOutlined />} />
+                        </Flex>
                     </Header>
 
                     <Content style={{ margin: '16px' }}>
@@ -72,7 +112,7 @@ const UserLayout = () => {
                         </Styled.ContentContainer>
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>
-                        FiNex ©{new Date().getFullYear()} Created by Dunno Gang
+                        FiNex ©{new Date().getFullYear()} Created by LTLN Gang
                     </Footer>
                 </Layout>
             </Layout>

@@ -73,8 +73,6 @@ export const FormItem = styled(Form.Item)`
     }
 
     &.ant-form-item:last-child {
-        margin-top: 10px;
-
         ${({ theme }) => theme.breakpoints.down('xs')} {
             margin-top: 28px;
         }
