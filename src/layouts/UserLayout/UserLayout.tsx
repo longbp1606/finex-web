@@ -7,8 +7,8 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { SiGoogleanalytics } from "react-icons/si";
 import { BsRecordBtn } from "react-icons/bs";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import Notification from '@/components/Notification/Notification';
 import ChatAI from '@/components/ChatAI';
-
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title } = Typography;
@@ -55,11 +55,15 @@ const UserLayout = () => {
                             type="text"
                             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                             onClick={() => setCollapsed(!collapsed)}
-                            style={{ fontSize: '16px', width: 64, height: 64 }}
+                            style={{ fontSize: "16px", width: 64, height: 64 }}
                         />
-                        {/* Tên Menu Đang Chọn */}
-                        <Title level={4} className="ml-5" style={{ marginBottom: "0px" }}>{selectedMenuLabel}</Title>
-                    </Header>
+                        <Title level={4} className="ml-5" style={{ marginBottom: "0px" }}>
+                            {selectedMenuLabel}
+                        </Title>
+                    </div>
+
+                    <Notification />
+                </Header>
                     <Content style={{ margin: '16px' }}>
                         <Styled.ContentContainer>
                             <Outlet />
