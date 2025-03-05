@@ -6,6 +6,7 @@ import Dashboard from "@/pages/User/Dashboard";
 import Alert from "@/pages/User/Alert";
 import Report from "@/pages/User/Report";
 import AddTransaction from "@/pages/User/Transaction/AddTransaction";
+import Chat from "@/pages/User/Chat";
 
 const UserRouter = () => {
     return <UserLayout />
@@ -26,6 +27,7 @@ const userRoutes = {
         { path: config.routes.user.transaction, element: <Report /> },
         { path: config.routes.user.report, element: <Dashboard /> },
         { path: config.routes.user.alert, element: <Alert /> },
+        { path: config.routes.user.chat, element: <Chat />},
     ]
 };
 

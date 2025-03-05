@@ -5,7 +5,7 @@ import { useState } from "react";
 import { MdCategory, MdGridOn, MdOutlineDashboard } from "react-icons/md";
 import { Outlet, useNavigate } from "react-router-dom";
 import { SiGoogleanalytics } from "react-icons/si";
-import { BsRecordBtn } from "react-icons/bs";
+import { BsChatDots, BsRecordBtn } from "react-icons/bs";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import Notification from '@/components/Notification/Notification';
 import ChatAI from '@/components/ChatAI';
@@ -19,6 +19,7 @@ const menuItems: MenuItemType[] = [
     { key: "transaction", label: 'Transaction', icon: <BsRecordBtn /> },
     { key: "report", label: 'Report', icon: <MdOutlineDashboard /> },
     { key: "alert", label: 'Alert', icon: <MdCategory /> },
+    { key: "chat", label: 'Chat', icon: <BsChatDots />},
 ];
 
 const UserLayout = () => {
@@ -76,7 +77,7 @@ const UserLayout = () => {
                 </Layout>
             </Layout>
 
-            <ChatAI />
+            { keys[1] !== "/chat" && <ChatAI /> }
         </>
     );
 };
