@@ -1,8 +1,8 @@
-import { ChatProps } from "@/services/gptAPI"
+import { ChatType } from "@/utils/type";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type MessageState = {
-    messages: ChatProps[];
+    messages: ChatType[];
 }
 
 const initialState: MessageState = {
@@ -13,7 +13,7 @@ const messagesSlice = createSlice({
     name: "messages",
     initialState,
     reducers: {
-        setMessages: (state, action: PayloadAction<ChatProps[]>) => {
+        setMessages: (state, action: PayloadAction<ChatType[]>) => {
             state.messages = action.payload;
         }
     }

@@ -1,4 +1,4 @@
-import { generateChat } from "@/services/gptAPI";
+import { generateChat } from "@/services/chatAPI";
 import { RootState } from "@/store";
 import { setMessages } from "@/store/slices/messages.slice";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -16,18 +16,18 @@ const ChatAI = () => {
     const [loading, setLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-    const handleSendMessage = async () => {
+    const handleSendMessage = async (inputMessage: string) => {
         if (!input.trim()) return;
 
-        const newMessages = [...messages, { role: 'user', content: input }];
+        const newMessages = [...messages, { message: inputMessage, isUser: true }];
         dispatch(setMessages(newMessages));
         setLoading(true);
         // setMessages(newMessages);
 
         try {
-            const response = await generateChat(newMessages);
-            const botMessage = response.data.choices[0].message;
-            dispatch(setMessages([...newMessages, botMessage]));
+            const response = await generateChat(inputMessage);
+            const botMessage = response.data.data;
+            dispatch(setMessages([...newMessages, { message: botMessage, isUser: false }]));
             // setMessages([...newMessages, botMessage]);
         } catch (error) {
             console.error("Error: ", error);
@@ -39,7 +39,7 @@ const ChatAI = () => {
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             event.preventDefault();
-            handleSendMessage();
+            handleSendMessage(input);
         }
     };
 
@@ -63,20 +63,20 @@ const ChatAI = () => {
                         {messages.map((msg, index) => (
                             <div
                                 key={index}
-                                style={{ textAlign: msg.role === "user" ? "right" : "left" }}
+                                style={{ textAlign: msg.isUser ? "right" : "left" }}
                             >
-                                <b style={{ color: msg.role === "user" ? "#18453E" : "gray" }}>
-                                    {msg.role === "user" ? "You" : "Advisor"}
+                                <b style={{ color: msg.isUser ? "#18453E" : "gray" }}>
+                                    {msg.isUser ? "You" : "Advisor"}
                                 </b>
                                 <Flex
                                     className="w-full"
-                                    justify={msg.role === "user" ? "end" : "start"}
+                                    justify={msg.isUser ? "end" : "start"}
                                 >
                                     <p
                                         className="w-fit bg-[#18453E] text-white px-4 py-2 rounded-3xl"
-                                        style={{ backgroundColor: msg.role === "user" ? "#18453E" : "gray" }}
+                                        style={{ backgroundColor: msg.isUser ? "#18453E" : "gray" }}
                                     >
-                                        {msg.content}
+                                        {msg.message}
                                     </p>
                                 </Flex>
                             </div>
@@ -117,7 +117,7 @@ const ChatAI = () => {
                             type="primary"
                             shape="circle"
                             icon={<BsSendFill />}
-                            onClick={handleSendMessage}
+                            onClick={() => handleSendMessage(input)}
                         />
                     </Flex>
                 </Flex>
