@@ -11,7 +11,7 @@ const routes = {
     transaction: '/user/transaction',
     report: '/user/report',
     alert: '/user/alert',
-    userAccount: '/admin/user-account',
+    chat: '/user/chat',
   },
   admin: {
     systemCategory: '/admin/systemCategory',
