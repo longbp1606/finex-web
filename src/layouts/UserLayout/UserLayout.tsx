@@ -8,6 +8,7 @@ import { SiGoogleanalytics } from "react-icons/si";
 import { BsRecordBtn } from "react-icons/bs";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import Notification from '@/components/Notification/Notification';
+import ChatAI from '@/components/ChatAI';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title } = Typography;
@@ -36,19 +37,20 @@ const UserLayout = () => {
     };
 
     return (
-        <Layout className="min-h-screen">
-            <Sider collapsible collapsed={collapsed} className='bg-[#ecf4e9]' trigger={null}>
-                <div className="demo-logo-vertical" />
-                <Menu
-                    items={menuItems}
-                    selectedKeys={[keys[1]]}
-                    onSelect={handleMenuSelect}
-                    className='bg-[#ecf4e9]'
-                />
-            </Sider>
-            <Layout>
-                <Header className="p-0 bg-white flex items-center px-4 justify-between">
-                    <div className="flex items-center">
+        <>
+            <Layout className="min-h-screen">
+                <Sider collapsible collapsed={collapsed} className='bg-[#ecf4e9]' trigger={null}>
+                    <div className="demo-logo-vertical" />
+                    <Menu
+                        items={menuItems}
+                        selectedKeys={[keys[1]]}
+                        onSelect={handleMenuSelect}
+                        className='bg-[#ecf4e9]'
+                    />
+                </Sider>
+                <Layout>
+                    <Header className='p-0 bg-white flex items-center px-4'>
+                        {/* Button Toggle Sidebar */}
                         <Button
                             type="text"
                             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -62,17 +64,19 @@ const UserLayout = () => {
 
                     <Notification />
                 </Header>
-
-                <Content style={{ margin: '16px' }}>
-                    <Styled.ContentContainer>
-                        <Outlet />
-                    </Styled.ContentContainer>
-                </Content>
-                <Footer style={{ textAlign: 'center' }}>
-                    FiNex ©{new Date().getFullYear()} Created by Dunno Gang
-                </Footer>
+                    <Content style={{ margin: '16px' }}>
+                        <Styled.ContentContainer>
+                            <Outlet />
+                        </Styled.ContentContainer>
+                    </Content>
+                    <Footer style={{ textAlign: 'center' }}>
+                        FiNex ©{new Date().getFullYear()} Created by Dunno Gang
+                    </Footer>
+                </Layout>
             </Layout>
-        </Layout>
+
+            <ChatAI />
+        </>
     );
 };
 
