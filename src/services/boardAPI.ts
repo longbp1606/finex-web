@@ -26,13 +26,13 @@ export const getBoard = () => {
 };
 
 export const getBoardDetail = (boardId: string) => {
-  return get(`/api/auth/board/${boardId}`);
+  return get(`/api/board/${boardId}`);
 };
 
 export const updateBoard = (boardId: string, data: dtoGetBoard) => {
-  return put(`/api/auth/board/${boardId}`, data);
+  return put(`/api/board/${boardId}`, data);
 };
 
 export const deleteBoard = (boardId: string) => {
-  return remove(`/api/auth/board/${boardId}`);
+  return remove(`/api/board/${boardId}`);
 };
