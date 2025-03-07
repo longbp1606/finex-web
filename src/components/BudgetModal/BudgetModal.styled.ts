@@ -1,4 +1,3 @@
-import { theme } from "@/themes";
 import { Modal, Upload } from "antd";
 import styled from "styled-components";
 
@@ -132,26 +131,3 @@ export const FooterContainer = styled.div`
   padding-top: 16px;
   border-top: 1px solid #ddd;
 `;
-
-export const CurrencyGroup = styled.div`
-  width: 100%;
-  display: flex;
-  gap: 20px;
-`
-export const CurrencyButton = styled.div`
-  width: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: ${theme.color.white};
-  color: ${theme.color.primary};
-  border: 1px solid ${theme.color.primary};
-  padding: 10px;
-  border-radius: 5px;
-  font-weight: 600;
-  font-size: 15px;
-
-  &:hover {
-  background-color: #7EC3B5;
-  }
-`
