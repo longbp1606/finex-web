@@ -46,6 +46,7 @@ const Analysis = () => {
                         loading={loading}
                         options={boards.map((board: any) => ({ label: board.title, value: board.id }))}
                         value={boardId}
+                        style={{ width: 200 }}
                     />
                 </Flex>
 
