@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { Button, Switch, Input, Space } from "antd";
+import { Button, Switch, Input, Space, Form } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
 import {
     ModalContainer,
@@ -12,9 +12,12 @@ import {
     Section,
     ColSection,
 } from "./BudgetModal.styled";
+import { createBoard, dtoCreateBoard } from "@/services/boardAPI";
+import { toast } from "react-toastify";
 
 interface BudgetModalProps {
     visible: boolean;
+    // onSubmit: () => void; // Prop mới
     onClose: () => void;
 }
 
@@ -33,19 +36,27 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ visible, onClose }) => {
     // const [selectedTheme, setSelectedTheme] = useState("null");
     const [accentColor, setAccentColor] = useState("#ff9800");
     const [isTransparent, setIsTransparent] = useState(false);
+    const [form] = Form.useForm();
+  const [board, setBoard] = useState<any>({});
+
     // const [uploadedImage, setUploadedImage] = useState<string | null>(null);
 
-    // const handleUpload = (info: any) => {
-    //     const file = info.file.originFileObj;
-    //     const reader = new FileReader();
-    //     reader.onload = () => {
-    //         if (typeof reader.result === "string") {
-    //             setUploadedImage(reader.result);
-    //             setSelectedTheme("custom");
-    //         }
-    //     };
-    //     reader.readAsDataURL(file);
-    // };
+    const handleSubmit = (values: dtoCreateBoard) => {
+        const newData = { ...values };
+        setBoard(newData);
+        handleAddBudget();
+        // onSubmit(); 
+      };
+
+        const handleAddBudget = async () => {
+          try {
+            await createBoard(board);
+            toast.success("Budget added successfully!");
+            // setAddModalVisible(false);
+          } catch (error: any) {
+            toast.error("Failed to add budget", error.response?.data.message);
+          }
+        };
 
     const handleReset = () => {
         setCategory({
@@ -62,9 +73,12 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ visible, onClose }) => {
     return (
         <CustomModal open={visible} onCancel={onClose} footer={null} centered title="Add New Budget">
             <ModalContainer>
+                <Form form={form} onFinish={handleSubmit}>
                 <Section>
                     <h4>Category Name</h4>
+                    <Form.Item name="title">
                     <Input value={category.title} onChange={(e) => setCategory({ ...category, title: e.target.value })} placeholder="Enter category name" />
+                    </Form.Item>
                 </Section>
 
                 <Section>
@@ -108,6 +122,7 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ visible, onClose }) => {
                         <Button type="primary">Add</Button>
                     </Space>
                 </FooterContainer>
+                </Form>
             </ModalContainer>
 
         </CustomModal>
