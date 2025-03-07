@@ -75,7 +75,7 @@ const Category = () => {
                         },
                         selectedRowKeys: deleteIds.map(String),
                       }}
-                    dataSource={categories.map((item, index) => ({
+                      dataSource={(categories ?? []).map((item, index) => ({ // Kiểm tra categories !== undefined
                         ...item,
                         index: index + 1,
                         key: item.id,
