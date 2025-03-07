@@ -76,7 +76,8 @@ const UserLayout = () => {
                                 cookieUtils.clear();
                                 navigate(config.routes.public.login);
                             }}
-                            style={{ padding: 20 }}
+                            style={{ padding: 20, background: '#18453E', borderRadius: 0, }}
+                            className='bg-[#ecf4e9]'
                         >
                             <MdLogout size={20} /> Logout
                         </Button>
