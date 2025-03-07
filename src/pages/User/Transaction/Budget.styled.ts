@@ -1,6 +1,18 @@
 import styled from "styled-components";
 import { Card as AntCard, Input, Select } from "antd";
 import { theme } from "@/themes";
+const { Search } = Input;
+
+export const CustomSearch = styled(Search)`
+  .ant-input-search-button {
+    background-color: ${theme.color.primary} !important;
+    border-color: ${theme.color.primary} !important;
+  }
+
+  .ant-input-search-button .anticon {
+    color: white !important;
+  }
+`;
 
 export const SearchContainer = styled.div`
   display: flex;
@@ -163,9 +175,11 @@ export const TransactionHeader = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 12px;
+  margin-top: 20px;
 `;
 
-export const TransactionHeader_Title = styled.h2`
-  font-size: 20px;
+export const TransactionHeader_Title = styled.h1`
+  font-size: 32px;
   font-weight: bold;
+  text-align: center;
 `;

@@ -23,11 +23,11 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({ visible, onCanc
                 </WarningIcon>
                 <ModalText>Are you sure?</ModalText>
                 <ModalDescription>
-                    This action cannot be undone. All values associated with this field will be lost.
+                    All values associated with this field will be lost. This action cannot be undone.
                 </ModalDescription>
                 <ModalFooter>
                     <DeleteButton type="primary" danger block onClick={onConfirm}>
-                        Delete field
+                        Delete
                     </DeleteButton>
                     <CancelButton block onClick={onCancel}>
                         Cancel

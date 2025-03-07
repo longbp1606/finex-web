@@ -150,10 +150,8 @@ import {
   AddCategoryCard,
   Card,
   CardFooter,
-  CardHeader,
   CardMeta,
   CardTitle,
-  CreateDate,
   DetailButton,
   Grid,
   MetaTag,
@@ -163,17 +161,17 @@ import {
   PlusIcon,
 } from "./Budget.styled";
 import "./index.css";
-import { deleteBoard, dtoGetBoard, getBoard, updateBoard } from "@/services/boardAPI";
+import { deleteBoard, dtoGetBoard, getBoard, updateBoard, getBoardDetail } from "@/services/boardAPI";
 import { toast } from "react-toastify";
 
-const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) => {  
+const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) => {
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [budgetsList, setBudgetsList] = useState<dtoGetBoard[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedBudgetId, setSelectedBudgetId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("");
-  
+
   const fetchBudgets = async () => {
     try {
       const res = await getBoard();
@@ -183,44 +181,19 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
     }
   };
 
+  const handleFetchBoardDetail = async (budgetId: string) => {
+    try {
+      const res = await getBoardDetail(budgetId);
+      console.log("Board Details:", res.data);
+      onSelectBudget(budgetId);
+    } catch (error: any) {
+      toast.error("Failed to fetch budget details", error.response?.data.message);
+    }
+  };
+
   useEffect(() => {
     fetchBudgets();
   }, []);
-
-  // const handleAddBudget = async (newBudget:any) => {
-  //   try {
-  //     await createBoard(newBudget);
-  //     toast.success("Budget added successfully!");
-  //     fetchBudgets();
-  //     setAddModalVisible(false);
-  //   } catch (error: any) {
-  //     toast.error("Failed to add budget", error.response?.data.message);
-  //   }
-  // };
-
-  const handleEditBudget = async (budgetId: any, updatedData: any) => {
-    try {
-      await updateBoard(budgetId, updatedData);
-      toast.success("Budget updated successfully!");
-      fetchBudgets();
-    } catch (error: any) {
-      toast.error("Failed to update budget", error.response?.data.message);
-    }
-  };
-
-  const handleDeleteBudget = async () => {
-    if (selectedBudgetId) {
-      try {
-        await deleteBoard(selectedBudgetId);
-        toast.success("Budget deleted successfully!");
-        fetchBudgets();
-      } catch (error: any) {
-        toast.error("Failed to delete budget", error.response?.data.message);
-      }
-    }
-    setIsModalVisible(false);
-    setSelectedBudgetId(null);
-  };
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
@@ -252,38 +225,26 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
           </PlusIcon>
         </AddCategoryCard>
         {budgetsList.map((budget) => (
-          <Card key={budget.id} hoverable>
-            {/* <CardHeader>
-              <CreateDate>{budget.createdAt.toISOString()}</CreateDate>
-            </CardHeader> */}
+          <Card key={budget.id} hoverable onClick={() => handleFetchBoardDetail(budget.id)}>
             <CardTitle>{budget.title}</CardTitle>
             <CardMeta>
               <MetaTag>{budget.currencyUnit}</MetaTag>
             </CardMeta>
             <CardFooter>
-              <DetailButton onClick={() => onSelectBudget(budget.id)}>
-                Details
-              </DetailButton>
-              <DetailButton onClick={() => handleEditBudget(budget.id, budget)}>
-                Edit
-              </DetailButton>
-              <DetailButton onClick={() => {
-                setSelectedBudgetId(budget.id);
-                setIsModalVisible(true);
+              <DetailButton onClick={(e) => {
+                e.stopPropagation();
+                handleFetchBoardDetail(budget.id);
               }}>
-                Delete
+                Details
               </DetailButton>
             </CardFooter>
           </Card>
         ))}
       </Grid>
-      <ConfirmDeleteModal visible={isModalVisible} onConfirm={handleDeleteBudget} onCancel={() => setIsModalVisible(false)} />
-      <BudgetModal visible={addModalVisible} onClose={() => setAddModalVisible(false)} 
-      // onSubmit={handleAddBudget} 
-      />
+      <ConfirmDeleteModal visible={isModalVisible} onConfirm={() => { }} onCancel={() => setIsModalVisible(false)} />
+      <BudgetModal visible={addModalVisible} onClose={() => setAddModalVisible(false)} />
     </div>
   );
 };
 
 export default Budget;
-
