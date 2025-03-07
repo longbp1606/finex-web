@@ -150,10 +150,8 @@ import {
   AddCategoryCard,
   Card,
   CardFooter,
-  CardHeader,
   CardMeta,
   CardTitle,
-  CreateDate,
   DetailButton,
   Grid,
   MetaTag,
@@ -167,59 +165,49 @@ import { deleteBoard, dtoGetBoard, getBoard, updateBoard } from "@/services/boar
 import { toast } from "react-toastify";
 
 const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) => {  
-  const [addModalVisible, setAddModalVisible] = useState(false);
+  const [addModalVisible, setAddModalVisible] = useState<boolean>(false);
   const [budgetsList, setBudgetsList] = useState<dtoGetBoard[]>([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [selectedBudgetId, setSelectedBudgetId] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortOption, setSortOption] = useState("");
-  
- 
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [sortOption, setSortOption] = useState<string>("");
 
   const fetchBudgets = async () => {
     try {
       const res = await getBoard();
-      setBudgetsList(res.data.data);
+      setBudgetsList(res?.data?.data ?? []);  // Nếu `res.data?.data` không tồn tại thì gán mảng rỗng []
     } catch (error: any) {
-      toast.error(error.response.data);
+      toast.error(error.response?.data ?? "Failed to fetch budgets.");
     }
   };
+
   useEffect(() => {
     fetchBudgets();
   }, []);
-  // const handleAddBudget = async (newBudget:any) => {
-  //   try {
-  //     await createBoard(newBudget);
-  //     toast.success("Budget added successfully!");
-  //     fetchBudgets();
-  //     setAddModalVisible(false);
-  //   } catch (error: any) {
-  //     toast.error("Failed to add budget", error.response?.data.message);
-  //   }
-  // };
 
-  const handleEditBudget = async (budgetId: any, updatedData: any) => {
+  const handleEditBudget = async (budgetId: string, updatedData: dtoGetBoard) => {
     try {
       await updateBoard(budgetId, updatedData);
       toast.success("Budget updated successfully!");
       fetchBudgets();
     } catch (error: any) {
-      toast.error("Failed to update budget", error.response?.data.message);
+      toast.error(error.response?.data?.message ?? "Failed to update budget.");
     }
   };
 
   const handleDeleteBudget = async () => {
-    if (selectedBudgetId) {
-      try {
-        await deleteBoard(selectedBudgetId);
-        toast.success("Budget deleted successfully!");
-        fetchBudgets();
-      } catch (error: any) {
-        toast.error("Failed to delete budget", error.response?.data.message);
-      }
+    if (!selectedBudgetId) return; // Nếu không có ID, thoát ngay
+
+    try {
+      await deleteBoard(selectedBudgetId);
+      toast.success("Budget deleted successfully!");
+      fetchBudgets();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message ?? "Failed to delete budget.");
+    } finally {
+      setIsModalVisible(false);
+      setSelectedBudgetId(null);
     }
-    setIsModalVisible(false);
-    setSelectedBudgetId(null);
   };
 
   return (
@@ -233,7 +221,7 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
         <SortSelect
           placeholder="Sort budgets"
           value={sortOption || undefined}
-          onChange={(value: any) => setSortOption(value as string)}
+          onChange={(value) => setSortOption(value || "")}
           allowClear
           options={[
             { label: "Name (A - Z)", value: "name-asc" },
@@ -245,42 +233,47 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
           ]}
         />
       </SearchContainer>
+
       <Grid>
         <AddCategoryCard onClick={() => setAddModalVisible(true)}>
           <PlusIcon>
             <PlusOutlined />
           </PlusIcon>
         </AddCategoryCard>
+
         {budgetsList.map((budget) => (
-          <Card key={budget.id} hoverable>
-            <CardHeader>
-              <CreateDate>{budget.createdAt.toISOString()}</CreateDate>
-            </CardHeader>
-            <CardTitle>{budget.title}</CardTitle>
+          <Card key={budget?.id ?? Math.random().toString()} hoverable>
+            {/* <CardHeader>
+              <CreateDate>{budget?.createdAt?.toISOString() || "N/A"}</CreateDate>
+            </CardHeader> */}
+            <CardTitle>{budget?.title ?? "Untitled"}</CardTitle>
             <CardMeta>
-              <MetaTag>{budget.currencyUnit}</MetaTag>
+              <MetaTag>{budget?.currencyUnit ?? "Unknown"}</MetaTag>
             </CardMeta>
             <CardFooter>
-              <DetailButton onClick={() => onSelectBudget(budget.id)}>
+              <DetailButton onClick={() => budget?.id && onSelectBudget(budget.id)}>
                 Details
               </DetailButton>
-              <DetailButton onClick={() => handleEditBudget(budget.id, budget)}>
+              <DetailButton onClick={() => budget?.id && handleEditBudget(budget.id, budget)}>
                 Edit
               </DetailButton>
-              <DetailButton onClick={() => {
-                setSelectedBudgetId(budget.id);
-                setIsModalVisible(true);
-              }}>
+              <DetailButton
+                onClick={() => {
+                  if (budget?.id) {
+                    setSelectedBudgetId(budget.id);
+                    setIsModalVisible(true);
+                  }
+                }}
+              >
                 Delete
               </DetailButton>
             </CardFooter>
           </Card>
         ))}
       </Grid>
+
       <ConfirmDeleteModal visible={isModalVisible} onConfirm={handleDeleteBudget} onCancel={() => setIsModalVisible(false)} />
-      <BudgetModal visible={addModalVisible} onClose={() => setAddModalVisible(false)} 
-      // onSubmit={handleAddBudget} 
-      />
+      <BudgetModal visible={addModalVisible} onClose={() => setAddModalVisible(false)} />
     </div>
   );
 };
