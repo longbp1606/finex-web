@@ -6,8 +6,8 @@ export interface ReportDataType {
     description: string;
     time: string;
     amount: number;
-    category: string;
-    note: string;
+    categories: string;
+    note?: string;
 }
 
 export const ReportColumns: TableProps<ReportDataType>['columns'] = [

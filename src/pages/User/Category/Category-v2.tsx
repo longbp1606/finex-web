@@ -22,7 +22,7 @@ const Category = () => {
 
             if (response.status !== 200) throw response.data;
             else {
-                setCategories(response.data.data);
+                setCategories(response.data.data as CategoryResponse[]);
             }
         } catch (error: any) {
             if (error.response) {
@@ -75,11 +75,11 @@ const Category = () => {
                         },
                         selectedRowKeys: deleteIds.map(String),
                       }}
-                      dataSource={(categories ?? []).map((item, index) => ({ // Kiểm tra categories !== undefined
+                    dataSource={categories ? categories.map((item, index) => ({
                         ...item,
                         index: index + 1,
                         key: item.id,
-                    }))}
+                    })) : []}
                     columns={columns}
                     />
             </CategoryStyled.Container>

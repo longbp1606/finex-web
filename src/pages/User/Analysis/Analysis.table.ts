@@ -1,13 +1,9 @@
+import { AnalysisResponse } from "@/services/analysisAPI";
 import { TableProps } from "antd";
 
-export interface AnalysisDataType {
+export interface AnalysisDataType extends AnalysisResponse {
     index: number;
     key: string;
-    description: string;
-    time: string;
-    amount: number;
-    category: string;
-    note: string;
 }
 
 export const ReportColumns: TableProps<AnalysisDataType>['columns'] = [
@@ -17,28 +13,26 @@ export const ReportColumns: TableProps<AnalysisDataType>['columns'] = [
         key: 'key',
     },
     {
-        title: 'Description',
-        dataIndex: 'description',
-        key: 'description',
-    },
-    {
-        title: 'Time',
-        dataIndex: 'time',
-        key: 'time',
-    },
-    {
         title: 'Amount',
         dataIndex: 'amount',
         key: 'amount',
+        render: (_, response) => response.amount.toLocaleString(),
     },
     {
-        title: 'Category',
-        dataIndex: 'category',
-        key: 'category',
+        title: 'Content',
+        dataIndex: 'content',
+        key: 'content',
     },
     {
-        title: 'Note',
-        dataIndex: 'note',
-        key: 'note',
+        title: 'Created at',
+        dataIndex: 'createdAt',
+        key: 'createdAt',
+        render: (_, response) => new Date(response.createdAt).toLocaleString(),
+    },
+    {
+        title: 'Categories',
+        dataIndex: 'categories',
+        key: 'categories',
+        render: (_, response) => response.categories.map(item => item.name).join(', '),
     },
 ];

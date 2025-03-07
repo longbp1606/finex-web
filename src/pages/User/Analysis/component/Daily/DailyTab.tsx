@@ -1,45 +1,87 @@
-import { ReportDataType } from "@/pages/User/Report/Report.table";
 import { DatePicker, DatePickerProps, Flex, message, Table, Typography } from "antd"
-import { ReportColumns } from "../../Analysis.table";
-import { useDispatch, useSelector } from "react-redux";
+import { AnalysisDataType, ReportColumns } from "../../Analysis.table";
+import { useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { extractedRecord } from "@/services/analysisAPI";
-
+import { AnalysisResponse, dailyAnalysis, DailyAnalysisResponse, extractedRecord } from "@/services/analysisAPI";
+import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 
 const { Text } = Typography;
 
 const DailyTab = () => {
     const boardId = useSelector((state: RootState) => state.analysis.boardId);
     const [messageApi, contextHolder] = message.useMessage();
-    
-    const renderExtractedRecord = async (dateString: string) => {
+    const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>(dayjs());
+    const [loading, setLoading] = useState(false);
+    const [dataSource, setDataSource] = useState<AnalysisDataType[]>([]);
+    const [totalSpent, setTotalSpent] = useState<number>(0);
+
+    const renderExtractedRecord = async () => {
+        setLoading(true);
         try {
-            const response = await extractedRecord({ boardId, date: dateString });
+            const response = await extractedRecord({ boardId, date: selectedDate.format('YYYY-MM-DD') });
 
             if (!response || response.status !== 200) throw response.data;
-            else messageApi.success(response.data.message);
+            else {
+                const convertData = response.data.data as AnalysisResponse[];
+                const data = convertData.map((item, index) => ({ ...item, index: index + 1, key: item.id }));
+                setDataSource(data);
+            }
         } catch (error: any) {
-            messageApi.error(error.response.data.message);
+            console.error(error);
         }
+        setLoading(false);
+    };
+
+    const fetchDailyAnalysis = async () => {
+        setLoading(true);
+        try {
+            const response = await dailyAnalysis({ boardId, date: selectedDate.format('YYYY-MM-DD') });
+
+            if (response.status !== 200) {
+                setTotalSpent(0);
+                throw response.data;
+            } else {
+                const convertData = response.data.data as DailyAnalysisResponse;
+                setTotalSpent(convertData.total);
+            }
+        }
+        catch (error: any) {
+            if (error.response) {
+                messageApi.error(error.response.data.message);
+            } else {
+                messageApi.error(error.code === 404 ? "Analysis not found" : error.message);
+            }
+        }
+        setLoading(false);
     }
+
+    useEffect(() => {
+        renderExtractedRecord();
+        fetchDailyAnalysis();
+    }, [selectedDate]);
 
     const onChange: DatePickerProps['onChange'] = (date, dateString) => {
         console.log(date, dateString);
+        setSelectedDate(date as dayjs.Dayjs);
     };
 
     return (
         <>
+            {contextHolder}
+
             <Flex>
-                <DatePicker onChange={onChange} />
+                <DatePicker onChange={onChange} value={selectedDate} />
             </Flex>
 
-            <Table<ReportDataType>
+            <Table<AnalysisDataType>
+                loading={loading}
                 columns={ReportColumns}
-                dataSource={[]}
+                dataSource={dataSource ? dataSource : []}
                 footer={() => (
                     <Flex vertical>
                         <Text>
-                            <Text strong>Total spent:</Text> 0k{" "}
+                            <Text strong>Total spent:</Text> {totalSpent.toLocaleString()}{" "}
                             VND
                         </Text>
                     </Flex>
