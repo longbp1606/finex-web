@@ -174,8 +174,6 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("");
   
- 
-
   const fetchBudgets = async () => {
     try {
       const res = await getBoard();
@@ -184,9 +182,11 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
       toast.error(error.response.data);
     }
   };
+
   useEffect(() => {
     fetchBudgets();
   }, []);
+
   // const handleAddBudget = async (newBudget:any) => {
   //   try {
   //     await createBoard(newBudget);
@@ -253,9 +253,9 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
         </AddCategoryCard>
         {budgetsList.map((budget) => (
           <Card key={budget.id} hoverable>
-            <CardHeader>
+            {/* <CardHeader>
               <CreateDate>{budget.createdAt.toISOString()}</CreateDate>
-            </CardHeader>
+            </CardHeader> */}
             <CardTitle>{budget.title}</CardTitle>
             <CardMeta>
               <MetaTag>{budget.currencyUnit}</MetaTag>
