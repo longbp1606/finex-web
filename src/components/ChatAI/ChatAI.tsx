@@ -1,12 +1,15 @@
+import { suggestion } from "@/pages/User/Chat/Chat";
 import { generateChat } from "@/services/chatAPI";
 import { RootState } from "@/store";
 import { setMessages } from "@/store/slices/messages.slice";
 import { LoadingOutlined } from "@ant-design/icons";
-import { Button, Flex, FloatButton, Input } from "antd"
+import { Button, Flex, FloatButton, Input, Typography } from "antd"
 import { useEffect, useRef, useState } from "react";
 import { BsSendFill } from "react-icons/bs";
 import { TbMessageCircleDollar } from "react-icons/tb"
 import { useDispatch, useSelector } from "react-redux";
+
+const { Text } = Typography;
 
 const ChatAI = () => {
     // const [messages, setMessages] = useState<ChatProps[]>([]);
@@ -103,6 +106,25 @@ const ChatAI = () => {
                             </Flex>
                         )}
 
+                        {messages.length === 0 && (
+                            <Flex align="flex-end" vertical gap={12}>
+                                <Text className="text-italic">Chat suggestion:</Text>
+                                {suggestion.map((suggest) => (
+                                    <Flex
+                                        className="w-full"
+                                        justify="end"
+                                        onClick={() => handleSendMessage(suggest)}
+                                    >
+                                        <p
+                                            className="w-fit text-[#18453E] px-4 py-2 rounded-3xl border-[#18453E] border hover:bg-[#18453E] hover:text-white transition-all ease-linear"
+                                        >
+                                            {suggest}
+                                        </p>
+                                    </Flex>
+                                ))}
+                            </Flex>
+                        )}
+
                         <div ref={messagesEndRef} />
                     </Flex>
                     <Flex gap={12} className="p-4">
@@ -112,6 +134,7 @@ const ChatAI = () => {
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={handleKeyDown}
                             placeholder="Enter text..."
+                            className="rounded-3xl"
                         />
                         <Button
                             type="primary"

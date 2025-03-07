@@ -2,12 +2,19 @@ import { generateChat } from "@/services/chatAPI";
 import { RootState } from "@/store";
 import { setMessages } from "@/store/slices/messages.slice";
 import { LoadingOutlined } from "@ant-design/icons";
-import { Button, Flex, Input, Typography } from "antd"
+import { Flex, Typography } from "antd"
 import { useEffect, useRef, useState } from "react";
 import { BsSendFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
+import * as ChatStyled from "./Chat.styled";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
+
+export const suggestion = [
+    'Analyze my spending habits',
+    'I want to plan buy a house',
+    'Saving strategies'
+]
 
 const Chat = () => {
     // const [messages, setMessages] = useState<ChatProps[]>([]);
@@ -24,7 +31,7 @@ const Chat = () => {
         dispatch(setMessages(newMessages));
         // setMessages(newMessages);
         setLoading(true);
-        setInput(''); 
+        setInput('');
 
         try {
             const response = await generateChat(inputMessage);
@@ -46,7 +53,7 @@ const Chat = () => {
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, [messages]);
+    }, [messages]);
 
     return (
         <Flex justify="center" className="w-full">
@@ -54,7 +61,7 @@ const Chat = () => {
                 <Flex>
                     <Title level={4}> Chat with AI Advisor</Title>
                 </Flex>
-                <Flex vertical gap={20} className="h-[600px] p-4 overflow-y-auto">
+                <Flex vertical gap={20} className="h-[600px] p-4 overflow-y-auto" justify="flex-end">
                     {messages.map((msg, index) => (
                         <div
                             key={index}
@@ -98,22 +105,42 @@ const Chat = () => {
                         </Flex>
                     )}
 
-                    <div ref={messagesEndRef}/>
+                    {messages.length === 0 && (
+                        <Flex align="flex-end" vertical gap={12}>
+                            <Text className="text-italic">Chat suggestion:</Text>
+                            {suggestion.map((suggest) => (
+                                <Flex
+                                    className="w-full"
+                                    justify="end"
+                                    onClick={() => handleSendMessage(suggest)}
+                                >
+                                    <p
+                                        className="w-fit text-[#18453E] px-4 py-2 rounded-3xl border-[#18453E] border hover:bg-[#18453E] hover:text-white transition-all ease-linear"
+                                    >
+                                        {suggest}
+                                    </p>
+                                </Flex>
+                            ))}
+                        </Flex>
+                    )}
+
+                    <div ref={messagesEndRef} />
                 </Flex>
-                <Flex gap={12} className="w-2xl p-4">
-                    <Input
-                        type="text"
+                <Flex gap={12} className="w-2xl p-4" align="center">
+                    <ChatStyled.ChatInput
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={handleKeyDown}
                         placeholder="Enter text..."
                         className="w-half"
+                        autoSize={{ minRows: 1, maxRows: 4 }}
                     />
-                    <Button
+                    <ChatStyled.SendButton
                         type="primary"
                         shape="circle"
-                        icon={<BsSendFill />}
+                        icon={<BsSendFill size={16} />}
                         onClick={() => handleSendMessage(input)}
+                        onKeyDown={handleKeyDown}
+                        style={{ width: "45px", height: "42px" }}
                     />
                 </Flex>
             </Flex>
