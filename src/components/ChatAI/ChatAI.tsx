@@ -27,7 +27,7 @@ const ChatAI = () => {
       try {
         const response = await listChat();
         const historyMessages = response.data.data as ChatResponse[];
-        dispatch(setMessages(historyMessages.reverse()));
+        dispatch(setMessages(historyMessages));
         // setMessages(historyMessages);
       } catch (error) {
         console.error("Error: ", error);
