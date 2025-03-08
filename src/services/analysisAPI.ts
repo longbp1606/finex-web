@@ -42,4 +42,5 @@ export interface MonthlyAnalysisResponse {
     total: number;
     variance: number;
     year: number;
+    chart: number[];
 }

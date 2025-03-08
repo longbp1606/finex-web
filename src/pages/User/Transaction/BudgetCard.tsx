@@ -142,7 +142,7 @@
 // export default Budget;
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { PlusOutlined } from "@ant-design/icons";
+import { CloseOutlined, Loading3QuartersOutlined, PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import BudgetModal from "@/components/BudgetModal/BudgetModal";
 import ConfirmDeleteModal from "@/components/DeleteModal/ConfirmDeleteModal";
@@ -159,10 +159,15 @@ import {
   SearchInput,
   SortSelect,
   PlusIcon,
+  CardHeader,
+  CreateDate,
+  DeleteButton,
 } from "./Budget.styled";
 import "./index.css";
-import { deleteBoard, dtoGetBoard, getBoard, updateBoard, getBoardDetail } from "@/services/boardAPI";
+import { deleteBoard, dtoGetBoard, getBoard, getBoardDetail } from "@/services/boardAPI";
 import { toast } from "react-toastify";
+import dayjs from "dayjs";
+import { Flex } from "antd";
 
 const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) => {
   const [addModalVisible, setAddModalVisible] = useState(false);
@@ -171,14 +176,48 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
   const [selectedBudgetId, setSelectedBudgetId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("");
+  const [loading, setLoading] = useState(true);
+  // Danh sách màu nền theo chu kỳ
+  const backgroundColors = ["#ffe1cc", "#d5f6ed", "#e2dbfa", "#dff3fe", "#fbe2f5", "#eceff4"];
+
+  // Lọc categories theo search term
+  const filteredCategories = budgetsList.filter((budget: any) =>
+    budget.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Sắp xếp categories
+  switch (sortOption) {
+    case "name-asc":
+      filteredCategories.sort((a: any, b: any) => a.title.localeCompare(b.title));
+      break;
+    case "name-desc":
+      filteredCategories.sort((a: any, b: any) => b.title.localeCompare(a.title));
+      break;
+    case "target-desc":
+      filteredCategories.sort((a: any, b: any) => b.target - a.target);
+      break;
+    case "target-asc":
+      filteredCategories.sort((a: any, b: any) => a.target - b.target);
+      break;
+    case "balance-desc":
+      filteredCategories.sort((a: any, b: any) => b.balance - a.balance);
+      break;
+    case "balance-asc":
+      filteredCategories.sort((a: any, b: any) => a.balance - b.balance);
+      break;
+    default:
+      break;
+  }
 
   const fetchBudgets = async () => {
+    setLoading(true);
     try {
       const res = await getBoard();
       setBudgetsList(res.data.data);
     } catch (error: any) {
-      toast.error(error.response.data);
+      toast.error(error.response?.data?.message || "Failed to fetch budgets");
     }
+    setLoading(false);
   };
 
   const handleFetchBoardDetail = async (budgetId: string) => {
@@ -186,8 +225,24 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
       const res = await getBoardDetail(budgetId);
       console.log("Board Details:", res.data);
       onSelectBudget(budgetId);
+      fetchBudgets();
     } catch (error: any) {
       toast.error("Failed to fetch budget details", error.response?.data.message);
+    }
+  };
+
+  const handleDeleteBudget = async () => {
+    if (!selectedBudgetId) return;
+
+    try {
+      await deleteBoard(selectedBudgetId);
+      toast.success("Budget deleted successfully!");
+      fetchBudgets(); // Refresh danh sách sau khi xóa
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to delete budget.");
+    } finally {
+      setIsModalVisible(false);
+      setSelectedBudgetId(null);
     }
   };
 
@@ -224,25 +279,63 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
             <PlusOutlined />
           </PlusIcon>
         </AddCategoryCard>
-        {budgetsList.map((budget) => (
-          <Card key={budget.id} hoverable onClick={() => handleFetchBoardDetail(budget.id)}>
-            <CardTitle>{budget.title}</CardTitle>
-            <CardMeta>
-              <MetaTag>{budget.currencyUnit}</MetaTag>
-            </CardMeta>
-            <CardFooter>
-              <DetailButton onClick={(e) => {
-                e.stopPropagation();
-                handleFetchBoardDetail(budget.id);
-              }}>
-                Details
-              </DetailButton>
-            </CardFooter>
-          </Card>
-        ))}
+        {loading ? (
+          <Flex justify="center" align="center" style={{ height: "100%" }}>
+            <Loading3QuartersOutlined spin />
+          </Flex>
+        ) : (
+          <>
+            {filteredCategories.map((budget: any, index: number) => (
+              <>
+                {/* {budgetsList.map((budget) => ( */}
+                <Card
+                  key={budget.id}
+                  hoverable
+                  // onClick={() => handleFetchBoardDetail(budget.id)}
+                  style={{ backgroundColor: backgroundColors[index % backgroundColors.length] }}
+                >
+
+                  <CardHeader>
+                    <CardTitle>{budget.title}</CardTitle>
+                    <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                      <DeleteButton
+                        onClick={() => {
+                          if (budget?.id) {
+                            setSelectedBudgetId(budget.id);
+                            setIsModalVisible(true);
+                          }
+                        }}
+                      >
+                        <CloseOutlined />
+                      </DeleteButton>
+                    </div>
+                  </CardHeader>
+                  <CardMeta>
+                    <MetaTag>{budget.currencyUnit}</MetaTag>
+                  </CardMeta>
+                  <CardFooter>
+                    <CreateDate>{dayjs(budget.createdAt).format("D MMMM YYYY")}</CreateDate>
+
+                    <DetailButton onClick={(e) => {
+                      e.stopPropagation();
+                      handleFetchBoardDetail(budget.id);
+                    }}>
+                      Details
+                    </DetailButton>
+                    <DetailButton onClick={() => { setAddModalVisible(true); setSelectedBudgetId(budget.id); }}>
+                      Edit
+                    </DetailButton>
+
+                  </CardFooter>
+                </Card>
+                {/* ))}; */}
+              </>
+            ))};
+          </>
+        )}
       </Grid>
-      <ConfirmDeleteModal visible={isModalVisible} onConfirm={() => { }} onCancel={() => setIsModalVisible(false)} />
-      <BudgetModal visible={addModalVisible} onClose={() => setAddModalVisible(false)} />
+      <ConfirmDeleteModal visible={isModalVisible} onConfirm={handleDeleteBudget} onCancel={() => setIsModalVisible(false)} />
+      <BudgetModal id={selectedBudgetId || ''} visible={addModalVisible} onClose={() => { setAddModalVisible(false); fetchBudgets(); }} fetchBudgets={fetchBudgets} />
     </div>
   );
 };

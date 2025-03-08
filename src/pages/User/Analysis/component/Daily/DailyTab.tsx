@@ -21,8 +21,10 @@ const DailyTab = () => {
         try {
             const response = await extractedRecord({ boardId, date: selectedDate.format('YYYY-MM-DD') });
 
-            if (!response || response.status !== 200) throw response.data;
-            else {
+            if (!response || response.status !== 200) {
+                setDataSource([]);
+                throw response.data
+            } else {
                 const convertData = response.data.data as AnalysisResponse[];
                 const data = convertData.map((item, index) => ({ ...item, index: index + 1, key: item.id }));
                 setDataSource(data);
@@ -47,6 +49,7 @@ const DailyTab = () => {
             }
         }
         catch (error: any) {
+            setTotalSpent(0);
             if (error.response) {
                 messageApi.error(error.response.data.message);
             } else {
@@ -59,7 +62,7 @@ const DailyTab = () => {
     useEffect(() => {
         renderExtractedRecord();
         fetchDailyAnalysis();
-    }, [selectedDate]);
+    }, [selectedDate, boardId]);
 
     const onChange: DatePickerProps['onChange'] = (date, dateString) => {
         console.log(date, dateString);
@@ -82,7 +85,7 @@ const DailyTab = () => {
                     <Flex vertical>
                         <Text>
                             <Text strong>Total spent:</Text> {totalSpent.toLocaleString()}{" "}
-                            VND
+                            kVND
                         </Text>
                     </Flex>
                 )}

@@ -7,3 +7,13 @@ export const generateChat = (message: string) => {
 export const listChat = () => {
   return get("/api/chat");
 };
+
+export interface ChatResponse {
+  id: string;
+  message: string;
+  role: string;
+}
+
+export interface ChatRequest {
+  message: string;
+}

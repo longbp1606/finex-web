@@ -1,4 +1,4 @@
-import { generateChat } from "@/services/chatAPI";
+import { ChatResponse, generateChat, listChat } from "@/services/chatAPI";
 import { RootState } from "@/store";
 import { setMessages } from "@/store/slices/messages.slice";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -23,12 +23,30 @@ const Chat = () => {
   const dispatch = useDispatch();
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [historyLoading, setHistoryLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const getHistoryChat = async () => {
+    setHistoryLoading(true);
+    try {
+      const response = await listChat();
+      const historyMessages = response.data.data as ChatResponse[];
+      dispatch(setMessages(historyMessages.reverse()));
+      // setMessages(historyMessages);
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+    setHistoryLoading(false);
+  }
+
+  useEffect(() => {
+    getHistoryChat();
+  }, []);
 
   const handleSendMessage = async (inputMessage: string) => {
     if (!inputMessage.trim()) return;
 
-    const newMessages = [...messages, { message: inputMessage, isUser: true }];
+    const newMessages = [...messages, { id: "default", message: inputMessage, role: "user" }];
     dispatch(setMessages(newMessages));
     // setMessages(newMessages);
     setLoading(true);
@@ -38,7 +56,7 @@ const Chat = () => {
       const response = await generateChat(inputMessage);
       const botMessage = response.data.data;
       dispatch(
-        setMessages([...newMessages, { message: botMessage, isUser: false }])
+        setMessages([...newMessages, { id: "default", message: botMessage, role: "assistant" }])
       );
       // setMessages([...newMessages, botMessage]);
     } catch (error) {
@@ -64,24 +82,25 @@ const Chat = () => {
         <Flex>
           <Title level={4}> Chat with AI Advisor</Title>
         </Flex>
-        <Flex
-          vertical
-          gap={20}
+        <div
+          // vertical
+          // gap={20}
           className="h-[600px] p-4 overflow-y-auto"
-          justify="flex-end"
+          // justify="flex-end"
         >
           {messages.map((msg, index) => (
             <div
               key={index}
-              style={{ textAlign: msg.isUser ? "right" : "left" }}
+              style={{ textAlign: msg.role === "user" ? "right" : "left" }}
+              // className="h-full"
             >
-              <b style={{ color: msg.isUser ? "#18453E" : "gray" }}>
-                {msg.isUser ? "You" : "Advisor"}
+              <b style={{ color: msg.role === "user" ? "#18453E" : "gray" }}>
+                {msg.role === "user" ? "You" : "Advisor"}
               </b>
-              <Flex className="w-full" justify={msg.isUser ? "end" : "start"}>
+              <Flex className="w-full" justify={msg.role === "user" ? "end" : "start"}>
                 <div
                   className="w-fit bg-[#18453E] text-white px-4 py-2 rounded-3xl"
-                  style={{ backgroundColor: msg.isUser ? "#18453E" : "gray" }}
+                  style={{ backgroundColor: msg.role === "user" ? "#18453E" : "gray" }}
                 >
                   <MyMarkdown content={msg.message} />
                 </div>
@@ -123,7 +142,7 @@ const Chat = () => {
           )}
 
           <div ref={messagesEndRef} />
-        </Flex>
+        </div>
         <Flex gap={12} className="w-2xl p-4" align="center">
           <ChatStyled.ChatInput
             value={input}

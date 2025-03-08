@@ -1,5 +1,5 @@
 import { suggestion } from "@/pages/User/Chat/Chat";
-import { generateChat } from "@/services/chatAPI";
+import { ChatResponse, generateChat, listChat } from "@/services/chatAPI";
 import { RootState } from "@/store";
 import { setMessages } from "@/store/slices/messages.slice";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -19,12 +19,30 @@ const ChatAI = () => {
   const { messages } = useSelector((state: RootState) => state.messages);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [historyLoading, setHistoryLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const getHistoryChat = async () => {
+      setHistoryLoading(true);
+      try {
+        const response = await listChat();
+        const historyMessages = response.data.data as ChatResponse[];
+        dispatch(setMessages(historyMessages.reverse()));
+        // setMessages(historyMessages);
+      } catch (error) {
+        console.error("Error: ", error);
+      }
+      setHistoryLoading(false);
+    }
+  
+    useEffect(() => {
+      getHistoryChat();
+    }, []);
 
   const handleSendMessage = async (inputMessage: string) => {
     if (!input.trim()) return;
 
-    const newMessages = [...messages, { message: inputMessage, isUser: true }];
+    const newMessages = [...messages, { id: "default", message: inputMessage, role: "user" }];
     dispatch(setMessages(newMessages));
     setLoading(true);
     // setMessages(newMessages);
@@ -33,7 +51,7 @@ const ChatAI = () => {
       const response = await generateChat(inputMessage);
       const botMessage = response.data.data;
       dispatch(
-        setMessages([...newMessages, { message: botMessage, isUser: false }])
+        setMessages([...newMessages, { id: "default", message: botMessage, role: "assistant" }])
       );
       // setMessages([...newMessages, botMessage]);
     } catch (error) {
@@ -74,15 +92,15 @@ const ChatAI = () => {
             {messages.map((msg, index) => (
               <div
                 key={index}
-                style={{ textAlign: msg.isUser ? "right" : "left" }}
+                style={{ textAlign: msg.role === "user" ? "right" : "left" }}
               >
-                <b style={{ color: msg.isUser ? "#18453E" : "gray" }}>
-                  {msg.isUser ? "You" : "Advisor"}
+                <b style={{ color: msg.role === "user" ? "#18453E" : "gray" }}>
+                  {msg.role === "user" ? "You" : "Advisor"}
                 </b>
-                <Flex className="w-full" justify={msg.isUser ? "end" : "start"}>
+                <Flex className="w-full" justify={msg.role === "user" ? "end" : "start"}>
                   <div
                     className="w-fit bg-[#18453E] text-white px-4 py-2 rounded-3xl"
-                    style={{ backgroundColor: msg.isUser ? "#18453E" : "gray" }}
+                    style={{ backgroundColor: msg.role === "user" ? "#18453E" : "gray" }}
                   >
                     <MyMarkdown content={msg.message} />
                   </div>
