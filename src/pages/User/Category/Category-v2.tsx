@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import * as CategoryStyled from './Category.styled';
 import { message, Table, TableColumnsType } from 'antd';
 import { CategoryResponse, listCategories } from '@/services/categoryAPI';
+import { useDocumentTitle } from '@/hooks';
 
 interface CategoryTableItemType extends CategoryResponse {
     index: number;
@@ -9,6 +10,8 @@ interface CategoryTableItemType extends CategoryResponse {
 }
 
 const Category = () => {
+    useDocumentTitle('Category | Finex');
+    
     const [categories, setCategories] = useState<CategoryResponse[]>([]);
     const [messageApi, contextHolder] = message.useMessage();
     const [deleteIds, setDeleteIds] = useState<string[]>([]);

@@ -8,6 +8,7 @@ import { BsSendFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import * as ChatStyled from "./Chat.styled";
 import MyMarkdown from "@/components/MyMarkdown/MyMarkdown";
+import { useDocumentTitle } from "@/hooks";
 
 const { Title, Text } = Typography;
 
@@ -19,6 +20,7 @@ export const suggestion = [
 
 const Chat = () => {
   // const [messages, setMessages] = useState<ChatProps[]>([]);
+  useDocumentTitle('Chat | Finex');
   const { messages } = useSelector((state: RootState) => state.messages);
   const dispatch = useDispatch();
   const [input, setInput] = useState("");

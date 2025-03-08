@@ -7,8 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { get } from "@/services/apiCaller";
 import { setBoard } from "@/store/slices/analysis.slice";
+import { useDocumentTitle } from "@/hooks";
 
 const Analysis = () => {
+    useDocumentTitle('Analysis | Finex');
+    
     const [typeTab, setTypeTab] = useState<String>('daily');
     const boardId = useSelector((state: RootState) => state.analysis.boardId);
     const dispatch = useDispatch();
