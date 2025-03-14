@@ -6,6 +6,7 @@ import { FeatureCardContents, FeedbackContents, LogoURLs, navbar } from './Home.
 import { MenuType } from '@/utils/type';
 import { ArrowRightOutlined, FacebookFilled, InstagramFilled, XOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import Logo from '@/components/Logo';
 
 const { Paragraph, Text, Title } = Typography;
 
@@ -21,7 +22,7 @@ const Home = () => {
                         <Col lg={12}>
                             <Row className='gap-10 items-center justify-start p-4'>
                                 <Col>
-                                    <Skeleton.Input />
+                                    <Logo />
                                 </Col>
                                 <Col>
                                     <Styled.Navbar
@@ -53,41 +54,62 @@ const Home = () => {
                         </Col>
                         <Styled.CardContainer lg={12} className='flex flex-col gap-8 p-4 mt-4'>
                             <Row className='flex align-center justify-between gap-10'>
-                                <Text>
+                                <Text className='text-2xl font-semibold'>
                                     The best AI financial manager
                                 </Text>
-                                <Button type='primary' onClick={() => navigate('/login')}>
+                                <Button
+                                    type='primary'
+                                    onClick={() => navigate('/login')}
+                                    className='w-40 text-lg font-medium rounded-3xl shadow-lg bg-[#f6f6f6] text-[#1b1b1b] hover:bg-[#1b1b1b] hover:text-[#f6f6f6] transition-all ease-in-out p-5'
+                                >
                                     Try it free
                                 </Button>
                             </Row>
 
                             <Row className='w-full'>
-                                <Skeleton.Node style={{
-                                    width: '750px',
-                                    height: '200px',
-                                    borderRadius: '12px'
-                                }} />
+                                <Card className="w-full rounded-xl shadow-md overflow-hidden">
+                                    <Flex justify="space-between" align="middle" className="p-4">
+                                        <Flex vertical>
+                                            <Title level={2} className="text-lg font-medium ">Total Balance</Title>
+                                            <Title level={3} className='text-2xl font-semibold'>$24,562.00</Title>
+                                            <Text type="success">+2.45% from last month</Text>
+                                        </Flex>
+                                        <Image
+                                            src="https://img.freepik.com/free-vector/digital-presentation-concept-illustration_114360-8195.jpg"
+                                            alt="Balance chart"
+                                            fallback="data:image/png;base64,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"
+                                            width={400}
+                                            preview={false}
+                                        />
+                                    </Flex>
+                                </Card>
                             </Row>
 
                             <Row className='flex gap-10'>
                                 <Col>
-                                    <Skeleton.Node style={{
-                                        width: '300px',
-                                        height: '300px',
-                                        borderRadius: '12px'
-                                    }} />
+                                    <Card className="w-[300px] h-[250px] rounded-xl shadow-md overflow-hidden">
+                                        <Flex vertical className="h-full justify-center items-center">
+                                            <Image
+                                                src="https://img.freepik.com/free-vector/charts-concept-illustration_114360-226.jpg"
+                                                alt="Expense breakdown"
+                                                fallback="data:image/png;base64,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"
+                                                width={300}
+                                                preview={false}
+                                            />
+                                        </Flex>
+                                    </Card>
                                 </Col>
                                 <Col className='flex flex-col gap-10'>
                                     <Row>
                                         <Flex vertical>
                                             <Title>3 Years</Title>
-                                            <Text>FiNex is already up</Text>
+                                            <Text className='stats-description'>FiNex is already up</Text>
                                         </Flex>
                                     </Row>
                                     <Row>
                                         <Flex vertical>
                                             <Title>45+</Title>
-                                            <Text>Financial companies support</Text>
+                                            <Text className='stats-description'>Financial companies support</Text>
                                         </Flex>
                                     </Row>
                                 </Col>
@@ -138,15 +160,19 @@ const Home = () => {
                             {FeatureCardContents.map((content, index) => (
                                 <Card
                                     cover={
-                                        <Skeleton.Image
-                                            style={{
-                                                width: '100%',
-                                                height: '250px',
-                                            }}
+                                        // <Skeleton.Image
+                                        //     style={{
+                                        //         width: '100%',
+                                        //         height: '250px',
+                                        //     }}
+                                        // />
+                                        <Image
+                                            src={content.url}
+                                            preview={false}
                                         />
                                     }
                                     key={index}
-                                    className='w-full'
+                                    className='w-full rounded-xl shadow-md overflow-hidden'
                                 >
                                     <Styled.FeatureCardMeta
                                         title={content.title}
@@ -171,20 +197,24 @@ const Home = () => {
                                     tools provide insights and recommendations to
                                     help you stay on top of your financial goals.
                                 </Paragraph>
-                                <Skeleton.Node style={{
-                                    width: '100%',
-                                    height: '300px',
-                                    borderRadius: '12px'
-                                }} />
+                                <Image
+                                    src="https://img.freepik.com/free-vector/audit-concept-illustration_114360-6387.jpg"
+                                    alt="Budget limits visualization"
+                                    width="100%"
+                                    className="rounded-xl mt-4 overflow-auto"
+                                    preview={false}
+                                />
                             </Styled.CardContainer>
                             <Col
                                 className='bg-[#f6f6f6] mt-4 p-12 rounded-xl flex flex-col justify-end w-full'
                             >
-                                <Skeleton.Node style={{
-                                    width: '100%',
-                                    height: '320px',
-                                    borderRadius: '12px'
-                                }} />
+                                <Image
+                                    src="https://img.freepik.com/free-vector/online-banking-concept-illustration_114360-12875.jpg"
+                                    alt="Expense tracking"
+                                    width="100%"
+                                    className="rounded-xl"
+                                    preview={false}
+                                />
                                 <Title className='mt-4'>
                                     Tracking your every expense
                                 </Title>
@@ -206,9 +236,9 @@ const Home = () => {
                         <Title className='text-left'>
                             What our customers say about FiNex
                         </Title>
-                        <Text className='text-left'>
+                        <Title level={4} className='text-left'>
                             FiNex has helped thousands of people manage their finances
-                        </Text>
+                        </Title>
                     </Row>
                     <Row justify={"center"}>
                         <Flex className='mt-20' justify='space-between' gap={20}>
@@ -218,7 +248,14 @@ const Home = () => {
                                     key={index}
                                 >
                                     <Row className='gap-5'>
-                                        <Skeleton.Avatar size={64} />
+                                        <Image
+                                            src={`https://randomuser.me/api/portraits/${content.gender}/${content.id}.jpg`}
+                                            alt={content.username}
+                                            width={64}
+                                            height={64}
+                                            className="rounded-full"
+                                            preview={false}
+                                        />
                                         <Flex vertical>
                                             <Title level={4} className='text-white'>
                                                 {content.username}
@@ -276,11 +313,15 @@ const Home = () => {
                         </Flex>
                     </Row>
                     <Row justify={"center"} className='mt-20 flex flex-col'>
-                        <Skeleton.Node style={{
-                            width: '100%',
-                            height: '300px',
-                            borderRadius: '12px',
-                        }} />
+                        <div className='w-full h-[300px] rounded-xl overflow-hidden flex justify-center items-center'>
+                            <Image
+                                src="https://img.freepik.com/premium-photo/photo-realistic-as-green-building-financial-chart-green-building-paired-with-financial-chart_980716-848392.jpg?w=1380"
+                                alt="Financial Blog"
+                                width="100%"
+                                className="rounded-xl"
+                                preview={false}
+                            />
+                        </div>
                     </Row>
                 </Container>
             </Styled.ContactSection>
@@ -290,10 +331,7 @@ const Home = () => {
                     <Row justify={"space-between"} className='gap-4 border-b border-gray-300 pb-16'>
                         <Col lg={10} className='flex flex-col gap-4'>
                             <Row justify={"start"} className='gap-4 items-center'>
-                                <Skeleton.Avatar size={32} />
-                                <Title level={3} className='text-gray-500 text-left'>
-                                    FiNex
-                                </Title>
+                                <Logo />
                             </Row>
                             <Row>
                                 <Text className='text-gray-500 text-left'>

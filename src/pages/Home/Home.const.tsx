@@ -36,39 +36,47 @@ export const FeatureCardContents = [
         description: `
             Protect your financial data with features like multi-factor
             authentication and granular employee permissions
-        `
+        `,
+        url: "https://img.freepik.com/free-vector/secure-login-concept-illustration_114360-4320.jpg"
     },
     {
         title: 'Trusted experience',
         description: `
             Apply in minutes and receive account approval within hours.
             Then access all the cast management essentials in one digital platform
-        `
+        `,
+        url: "https://img.freepik.com/free-vector/self-promotion-concept-illustration_114360-19321.jpg",
     },
     {
         title: 'Structured outreach',
         description: `
             Finex offers around the clock support answer your most pressing questions
             and propel your business forward
-        `
+        `,
+        url: "https://img.freepik.com/free-vector/manage-money-concept-illustration_114360-8079.jpg",
     }
 ];
 
 export const FeedbackContents = [
     {
-        username: 'John Doe',
-        career: 'CEO, Company Inc.',
-        feedback: `
-            Finex has been a game changer for our business. We've been able to
-            manage our cash flow better and make more strategic financial decisions
-        `
+        username: "Emily Johnson",
+        career: "Marketing Manager",
+        feedback: "FiNex has revolutionized how I manage my finances. The AI recommendations are spot-on!",
+        gender: "women",
+        id: 32
     },
     {
-        username: 'Jane Doe',
-        career: 'CFO, Company Inc.',
-        feedback: `
-            Finex has been a game changer for our business. We've been able to
-            manage our cash flow better and make more strategic financial decisions
-        `
+        username: "Michael Chen",
+        career: "Software Engineer",
+        feedback: "I love how FiNex automatically categorizes my expenses and provides insights on my spending habits.",
+        gender: "men",
+        id: 45
+    },
+    {
+        username: "Sarah Williams",
+        career: "Small Business Owner",
+        feedback: "As someone running a small business, FiNex helps me separate personal and business expenses easily.",
+        gender: "women",
+        id: 68
     }
-]
+];
