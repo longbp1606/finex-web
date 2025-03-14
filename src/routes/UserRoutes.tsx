@@ -2,7 +2,6 @@ import config from "@/config";
 import UserLayout from "@/layouts/UserLayout"
 import Transaction from "@/pages/User/Transaction";
 import Category from "@/pages/User/Category";
-// import Dashboard from "@/pages/User/Dashboard";
 // import Alert from "@/pages/User/Alert";
 // import AddTransaction from "@/pages/User/Transaction/AddTransaction";
 import Chat from "@/pages/User/Chat";
