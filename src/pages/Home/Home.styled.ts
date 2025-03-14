@@ -46,8 +46,16 @@ export const CardContainer = styled(Col)`
     background: linear-gradient(133deg, rgba(136,236,188,1) 0%, rgba(33,87,89,1) 100%);
     border-radius: 12px;
 
-    & .ant-typography {
+    & h1.ant-typography {
         color: white;
+        font-size: 3.5rem;
+        margin-bottom: 0;
+    }
+
+    & .ant-typography.stats-description {
+        color: white;
+        font-size: 1.25rem;
+        font-weight: 300;
     }
 `;
 
@@ -74,6 +82,20 @@ export const FeatureCardMeta = styled(Meta)`
 
 export const FeedbackSection = styled.section`
     margin-top: 64px;
+
+    & h1.ant-typography {
+        font-size: 2.5rem;
+        font-weight: 500;
+        color: ${theme.color.secondary};
+        margin-bottom: 0;
+    }
+
+    & h4.ant-typography {
+        font-size: 1.25rem;
+        font-weight: 400;
+        color: ${theme.color.quaternary};
+    }
+
 `;
 
 export const ContactSection = styled.section`
