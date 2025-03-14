@@ -2,32 +2,40 @@ import * as Styled from './UserLayout.styled';
 import { Avatar, Button, Flex, Layout, Menu, Typography } from "antd";
 import { MenuItemType } from "antd/es/menu/interface";
 import { useEffect, useState } from "react";
-import { MdCategory, MdGridOn, MdLogout } from "react-icons/md";
+import { MdCategory, MdLogout, MdSpaceDashboard } from "react-icons/md";
 import { Outlet, useNavigate } from "react-router-dom";
 import { SiGoogleanalytics } from "react-icons/si";
-import { BsChatDots } from "react-icons/bs";
+import { BsChatDotsFill, BsFillGearFill } from "react-icons/bs";
 import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from '@ant-design/icons';
 import Notification from '@/components/Notification/Notification';
 import ChatAI from '@/components/ChatAI';
 import { getProfile, ProfileType } from '@/services/authAPI';
 import cookieUtils from '@/services/cookieUtils';
 import config from '@/config';
+import { PiPiggyBankFill } from "react-icons/pi";
+import { FaFileInvoiceDollar, FaUser } from "react-icons/fa";
+import { IoGrid } from "react-icons/io5";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title, Text } = Typography;
 
 const menuItems: MenuItemType[] = [
-    { key: "budget", label: 'Budget', icon: <MdGridOn /> },
+    { key: "budget", label: 'Budget', icon: <IoGrid /> },
+    { key: "saving", label: 'Saving', icon: <PiPiggyBankFill /> },
     { key: "category", label: 'Category', icon: <MdCategory /> },
     { key: "analysis", label: 'Analysis', icon: <SiGoogleanalytics /> },
+    { key: "bill", label: 'Bill', icon: <FaFileInvoiceDollar /> },
+    { key: "advice", label: 'Advice', icon: <BsChatDotsFill /> },
+    { key: "setting", label: 'Setting', icon: <BsFillGearFill /> },
+    // { key: "profile", label: 'Profile', icon: <FaUser /> },
+    { key: 'dashboard', label: 'Dashboard', icon: <MdSpaceDashboard /> },
     // { key: "report", label: 'Report', icon: <MdOutlineDashboard /> },
     // { key: "alert", label: 'Alert', icon: <MdCategory /> },
-    { key: "chat", label: 'Chat', icon: <BsChatDots /> },
 ];
 
 const UserLayout = () => {
     const navigate = useNavigate();
-    const keys = location.pathname.split("/user");
+    const keys = location.pathname.split("/user/");
     const [collapsed, setCollapsed] = useState(false);
     const [selectedMenuLabel, setSelectedMenuLabel] = useState(
         menuItems.find(item => item.key === keys[1])?.label || "Budget"
