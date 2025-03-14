@@ -91,6 +91,8 @@ export const AntdThemeConfig = {
     components: {
         Menu: {
             itemColor: PRIMARY_COLOR,
+            itemSelectedBg: PRIMARY_COLOR,
+            itemSelectedColor: SECONDARY_COLOR,
         },
     },
 };
