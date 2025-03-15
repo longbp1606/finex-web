@@ -220,7 +220,7 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ id, visible, onClose }) => {
                     }}
                 >
                     <Section>
-                        <h4>Category Name</h4>
+                        <h4>Budget Name</h4>
                         <Form.Item 
                             name="title" 
                             rules={[{ required: true, message: "Please enter category name" }]}
