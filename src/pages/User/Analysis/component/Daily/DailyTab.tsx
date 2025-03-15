@@ -85,7 +85,7 @@ const DailyTab = () => {
                     <Flex vertical>
                         <Text>
                             <Text strong>Total spent:</Text> {totalSpent.toLocaleString()}{" "}
-                            kVND
+                            VND
                         </Text>
                     </Flex>
                 )}
