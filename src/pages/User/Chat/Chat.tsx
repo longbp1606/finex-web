@@ -1,4 +1,4 @@
-import { ChatResponse, generateChat, listChat } from "@/services/chatAPI";
+import { ChatResponse, generateChatStream, listChat } from "@/services/chatAPI";
 import { RootState } from "@/store";
 import { setMessages } from "@/store/slices/messages.slice";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -19,26 +19,22 @@ export const suggestion = [
 ];
 
 const Chat = () => {
-  // const [messages, setMessages] = useState<ChatProps[]>([]);
   useDocumentTitle('Chat | Finex');
   const { messages } = useSelector((state: RootState) => state.messages);
   const dispatch = useDispatch();
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [historyLoading, setHistoryLoading] = useState(false);
+  const [streamingMessage, setStreamingMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const getHistoryChat = async () => {
-    setHistoryLoading(true);
     try {
       const response = await listChat();
       const historyMessages = response.data.data as ChatResponse[];
       dispatch(setMessages(historyMessages));
-      // setMessages(historyMessages);
     } catch (error) {
       console.error("Error: ", error);
     }
-    setHistoryLoading(false);
   }
 
   useEffect(() => {
@@ -50,21 +46,42 @@ const Chat = () => {
 
     const newMessages = [...messages, { id: "default", message: inputMessage, role: "user" }];
     dispatch(setMessages(newMessages));
-    // setMessages(newMessages);
     setLoading(true);
     setInput("");
+    setStreamingMessage("");
 
     try {
-      const response = await generateChat(inputMessage);
-      const botMessage = response.data.data;
+      const controller = new AbortController();
+      const signal = controller.signal;
+      
       dispatch(
-        setMessages([...newMessages, { id: "default", message: botMessage, role: "assistant" }])
+        setMessages([...newMessages, { id: "default", message: "", role: "assistant" }])
       );
-      // setMessages([...newMessages, botMessage]);
+      
+      const onChunk = (chunk: string) => {
+        setStreamingMessage(prev => prev + chunk);
+      };
+      
+      await generateChatStream(inputMessage, onChunk, signal);
+      
+      const updatedMessages = [...newMessages, { 
+        id: "default", 
+        message: streamingMessage, 
+        role: "assistant" 
+      }];
+      dispatch(setMessages(updatedMessages));
+      
     } catch (error) {
       console.error("Error: ", error);
+      const errorMessages = [...newMessages, { 
+        id: "default", 
+        message: "Sorry, I encountered an error while processing your request.", 
+        role: "assistant" 
+      }];
+      dispatch(setMessages(errorMessages));
     }
     setLoading(false);
+    setStreamingMessage("");
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -76,7 +93,7 @@ const Chat = () => {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, streamingMessage]);
 
   return (
     <Flex justify="center" className="w-full">
@@ -84,18 +101,9 @@ const Chat = () => {
         <Flex>
           <Title level={4}> Chat with AI Advisor</Title>
         </Flex>
-        <div
-          // vertical
-          // gap={20}
-          className="h-[600px] p-4 overflow-y-auto"
-          // justify="flex-end"
-        >
+        <div className="h-[600px] p-4 overflow-y-auto">
           {messages.map((msg, index) => (
-            <div
-              key={index}
-              style={{ textAlign: msg.role === "user" ? "right" : "left" }}
-              // className="h-full"
-            >
+            <div key={index} style={{ textAlign: msg.role === "user" ? "right" : "left" }}>
               <b style={{ color: msg.role === "user" ? "#18453E" : "gray" }}>
                 {msg.role === "user" ? "You" : "Advisor"}
               </b>
@@ -104,13 +112,17 @@ const Chat = () => {
                   className="w-fit bg-[#18453E] text-white px-4 py-2 rounded-3xl"
                   style={{ backgroundColor: msg.role === "user" ? "#18453E" : "gray" }}
                 >
-                  <MyMarkdown content={msg.message} />
+                  <MyMarkdown content={
+                    msg.role === "assistant" && index === messages.length - 1 && loading
+                      ? streamingMessage
+                      : msg.message
+                  } />
                 </div>
               </Flex>
             </div>
           ))}
 
-          {loading && (
+          {loading && streamingMessage === "" && (
             <Flex justify="flex-start">
               <div style={{ textAlign: "left" }}>
                 <b style={{ color: "gray" }}>Advisor</b>
@@ -131,6 +143,7 @@ const Chat = () => {
               <Text className="text-italic">Chat suggestion:</Text>
               {suggestion.map((suggest) => (
                 <Flex
+                  key={suggest}
                   className="w-full"
                   justify="end"
                   onClick={() => handleSendMessage(suggest)}
@@ -160,6 +173,7 @@ const Chat = () => {
             onClick={() => handleSendMessage(input)}
             onKeyDown={handleKeyDown}
             style={{ width: "45px", height: "42px" }}
+            disabled={loading}
           />
         </Flex>
       </Flex>

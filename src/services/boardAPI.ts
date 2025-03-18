@@ -18,21 +18,34 @@ export type dtoGetBoard = {
 };
 
 export const createBoard = (board: dtoCreateBoard) => {
-  return post("/api/board", board);
+  return post("/api/budget", board);
 };
 
 export const getBoard = () => {
-  return get("/api/board");
+  return get("/api/budget");
 };
 
 export const getBoardDetail = (boardId: string) => {
-  return get(`/api/board/${boardId}`);
+  return get(`/api/budget/${boardId}`);
 };
 
 export const updateBoard = (boardId: string, data: dtoCreateBoard) => {
-  return put(`/api/board/${boardId}`, data);
+  return put(`/api/budget/${boardId}`, data);
 };
 
 export const deleteBoard = (boardId: string) => {
-  return remove(`/api/board/${boardId}`);
+  return remove(`/api/budget/${boardId}`);
+};
+
+export const createBudgetWithAI = async (prompt: string, language: string = "vi") => {
+  try {
+    const response = await post("/api/budget/ai-create", {
+      prompt,
+      language,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating budget with AI:", error);
+    throw error;
+  }
 };
