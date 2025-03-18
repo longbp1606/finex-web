@@ -54,19 +54,22 @@ const Chat = () => {
       const controller = new AbortController();
       const signal = controller.signal;
       
-      dispatch(
-        setMessages([...newMessages, { id: "default", message: "", role: "assistant" }])
-      );
+      // dispatch(
+      //   setMessages([...newMessages, { id: "default", message: "", role: "assistant" }])
+      // );
+
+      let completeResponse = "";
       
       const onChunk = (chunk: string) => {
         setStreamingMessage(prev => prev + chunk);
+        completeResponse += chunk;
       };
       
       await generateChatStream(inputMessage, onChunk, signal);
       
       const updatedMessages = [...newMessages, { 
         id: "default", 
-        message: streamingMessage, 
+        message: completeResponse, 
         role: "assistant" 
       }];
       dispatch(setMessages(updatedMessages));
@@ -132,6 +135,22 @@ const Chat = () => {
                     style={{ backgroundColor: "gray" }}
                   >
                     <LoadingOutlined spin />
+                  </p>
+                </Flex>
+              </div>
+            </Flex>
+          )}
+
+          {streamingMessage !== "" && (
+            <Flex justify="flex-start">
+              <div style={{ textAlign: "left" }}>
+                <b style={{ color: "gray" }}>Advisor</b>
+                <Flex className="w-full" justify={"start"}>
+                  <p
+                    className="w-fit bg-[#18453E] text-white px-4 py-2 rounded-3xl"
+                    style={{ backgroundColor: "gray" }}
+                  >
+                    <MyMarkdown content={streamingMessage} />
                   </p>
                 </Flex>
               </div>

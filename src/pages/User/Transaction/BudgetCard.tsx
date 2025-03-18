@@ -26,6 +26,7 @@ import { deleteBoard, dtoGetBoard, getBoard, getBoardDetail } from "@/services/b
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import { Flex, Modal, Input, Button } from "antd";
+import { IoSparklesSharp } from "react-icons/io5";
 
 const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) => {
   const [addModalVisible, setAddModalVisible] = useState(false);
@@ -40,7 +41,7 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
   const [aiPrompt, setAiPrompt] = useState<string>("");
   const [aiModalVisible, setAiModalVisible] = useState(false);
   const [creatingBudget, setCreatingBudget] = useState(false);
-  
+
   // Lọc categories theo search term
   const filteredCategories = budgetsList.filter((budget: any) =>
     budget.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -116,7 +117,7 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
       toast.error("Please enter a prompt for the AI");
       return;
     }
-    
+
     setCreatingBudget(true);
     try {
       const result = await createBudgetWithAI(aiPrompt);
@@ -162,9 +163,9 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
         </AddCategoryCard>
         {/* AI Budget Creation Button */}
         <AddCategoryCard onClick={() => setAiModalVisible(true)}>
-          <PlusIcon>
-            AI
-          </PlusIcon>
+          <Flex align="center" gap={12} className="text-xl">
+            <IoSparklesSharp /> Generate budget with AI
+          </Flex>
         </AddCategoryCard>
         {loading ? (
           <Flex justify="center" align="center" style={{ height: "100%" }}>
@@ -216,7 +217,7 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
       </Grid>
       <ConfirmDeleteModal visible={isModalVisible} onConfirm={handleDeleteBudget} onCancel={() => setIsModalVisible(false)} />
       <BudgetModal id={selectedBudgetId || ''} visible={addModalVisible} onClose={() => { setAddModalVisible(false); fetchBudgets(); }} fetchBudgets={fetchBudgets} />
-      
+
       {/* AI Budget Creation Modal */}
       <Modal
         title="Create Budget with AI"
@@ -228,8 +229,8 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
           }
         }}
         footer={[
-          <Button 
-            key="cancel" 
+          <Button
+            key="cancel"
             onClick={() => {
               if (!creatingBudget) {
                 setAiModalVisible(false);
@@ -240,9 +241,9 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
           >
             Cancel
           </Button>,
-          <Button 
-            key="submit" 
-            type="primary" 
+          <Button
+            key="submit"
+            type="primary"
             onClick={handleCreateBudgetWithAI}
             loading={creatingBudget}
             disabled={creatingBudget}
