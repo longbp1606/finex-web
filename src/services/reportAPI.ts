@@ -1,12 +1,12 @@
 import { get, post, put, remove } from "./apiCaller";
 
 export const getReport = (boardId: string, date?: string) => {
-    const url = `/api/board/${boardId}/record${date ? `?date=${date}` : ""}`;
+    const url = `/api/budget/${boardId}/record${date ? `?date=${date}` : ""}`;
     return get(url);
 };
 
 export const createReport = (boardId: string, content: string, createdAt?: string) => {
-    const url = `/api/board/${boardId}/record`;
+    const url = `/api/budget/${boardId}/record`;
     const body = {
         content,
         createdAt: createdAt || new Date().toISOString(),
@@ -15,7 +15,7 @@ export const createReport = (boardId: string, content: string, createdAt?: strin
 };
 
 export const updateReport = (boardId: string, recordId: string, content: string, createdAt?: string) => {
-    const url = `/api/board/${boardId}/record/${recordId}`;
+    const url = `/api/budget/${boardId}/record/${recordId}`;
     const body = {
         content,
         createdAt: createdAt || new Date().toISOString(),
@@ -24,7 +24,7 @@ export const updateReport = (boardId: string, recordId: string, content: string,
 };
 
 export const removeReport = (boardId: string, recordId: string) => {
-    const url = `/api/board/${boardId}/record/${recordId}`;
+    const url = `/api/budget/${boardId}/record/${recordId}`;
     return remove(url);
 };
 

@@ -22,7 +22,7 @@ const Analysis = () => {
         setLoading(true);
 
         try {
-            const response = await get('/api/board');
+            const response = await get('/api/budget');
 
             if (!response || response.status !== 200) throw response.data;
             else {

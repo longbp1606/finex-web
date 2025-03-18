@@ -2,15 +2,15 @@ import { get } from "./apiCaller";
 import { CategoryResponse } from "./categoryAPI";
 
 export const extractedRecord = (params: AnalysisParamsRequest) => {
-    return get(`/api/board/${params.boardId}/analysis/extracted-record`, { date: params.date });
+    return get(`/api/budget/${params.boardId}/analysis/extracted-record`, { date: params.date });
 }
 
 export const dailyAnalysis = (params: AnalysisParamsRequest) => {
-    return get(`/api/board/${params.boardId}/analysis/daily`, { date: params.date });
+    return get(`/api/budget/${params.boardId}/analysis/daily`, { date: params.date });
 }
 
 export const monthlyAnalysis = (params: AnalysisParamsRequest) => {
-    return get(`/api/board/${params.boardId}/analysis/monthly`, { date: params.date });
+    return get(`/api/budget/${params.boardId}/analysis/monthly`, { date: params.date });
 }
 
 export interface AnalysisParamsRequest {
