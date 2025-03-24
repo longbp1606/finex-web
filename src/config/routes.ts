@@ -14,6 +14,7 @@ const routes = {
     advice: '/user/advice',
     analysis: '/user/analysis',
     bill: '/user/bill',
+    bankAccount: '/user/bankAccount',
     setting: '/user/setting',
     profile: '/user/profile',
   },
