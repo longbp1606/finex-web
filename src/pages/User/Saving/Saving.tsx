@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Card,
     Row,
@@ -18,7 +18,8 @@ import {
     Empty,
     Tooltip,
     List,
-    Tag
+    Tag,
+    Alert
 } from 'antd';
 import {
     PlusOutlined,
@@ -45,6 +46,7 @@ const { Option } = Select;
 interface Contribution {
     date: string;
     amount: number;
+    bankAccountId?: string;
 }
 
 interface AutoContribution {
@@ -64,6 +66,7 @@ interface SavingGoal {
     contributions: Contribution[];
     autoContribution: AutoContribution;
     status: 'active' | 'completed';
+    bankAccountId?: string;
 }
 
 interface ContributionWithGoalInfo extends Contribution {
@@ -81,6 +84,7 @@ interface FormValues {
     notes?: string;
     autoContributionAmount?: number;
     autoContributionFrequency?: 'none' | 'weekly' | 'biweekly' | 'monthly';
+    bankAccountId?: string;
 }
 
 const Saving = () => {
@@ -88,80 +92,83 @@ const Saving = () => {
     const [form] = Form.useForm<FormValues>();
     const [editingGoalId, setEditingGoalId] = useState<number | null>(null);
     const [activeTab, setActiveTab] = useState<string>('active');
+    const [bankAccounts, setBankAccounts] = useState<any[]>([]);
+    const [selectedBankAccountId, setSelectedBankAccountId] = useState<string | null>(null);
 
-    // Sample savings goals
-    const [savingGoals, setSavingGoals] = useState<SavingGoal[]>([
-        {
-            id: 1,
-            name: 'Vacation to Japan',
-            icon: 'global',
-            targetAmount: 5000,
-            currentAmount: 2750,
-            deadline: '2025-09-15',
-            category: 'Travel',
-            notes: 'Planning a 2-week trip to Tokyo and Kyoto',
-            contributions: [
-                { date: '2025-01-05', amount: 500 },
-                { date: '2025-02-10', amount: 750 },
-                { date: '2025-03-08', amount: 1000 },
-                { date: '2025-03-15', amount: 500 },
-            ],
-            autoContribution: { amount: 250, frequency: 'monthly' },
-            status: 'active',
-        },
-        {
-            id: 2,
-            name: 'New Car',
-            icon: 'car',
-            targetAmount: 20000,
-            currentAmount: 5000,
-            deadline: '2025-12-31',
-            category: 'Vehicle',
-            notes: 'Looking at electric vehicles',
-            contributions: [
-                { date: '2024-10-05', amount: 2000 },
-                { date: '2024-12-10', amount: 1500 },
-                { date: '2025-02-15', amount: 1500 },
-            ],
-            autoContribution: { amount: 500, frequency: 'monthly' },
-            status: 'active',
-        },
-        {
-            id: 3,
-            name: 'Emergency Fund',
-            icon: 'bank',
-            targetAmount: 15000,
-            currentAmount: 13500,
-            deadline: '2025-06-30',
-            category: 'Emergency',
-            notes: '6 months of living expenses',
-            contributions: [
-                { date: '2024-08-05', amount: 5000 },
-                { date: '2024-09-10', amount: 4000 },
-                { date: '2024-11-15', amount: 3000 },
-                { date: '2025-01-20', amount: 1500 },
-            ],
-            autoContribution: { amount: 500, frequency: 'monthly' },
-            status: 'active',
-        },
-        {
-            id: 4,
-            name: 'Wedding Fund',
-            icon: 'heart',
-            targetAmount: 25000,
-            currentAmount: 25000,
-            deadline: '2024-06-15',
-            category: 'Event',
-            notes: 'Completed saving for wedding',
-            contributions: [
-                { date: '2023-06-05', amount: 10000 },
-                { date: '2023-09-10', amount: 8000 },
-                { date: '2023-12-15', amount: 7000 },
-            ],
-            autoContribution: { amount: 0, frequency: 'none' },
-            status: 'completed',
-        }
-    ]);
+    // Fetch bank accounts
+    useEffect(() => {
+        const getBankAccounts = async () => {
+            try {
+                // Import mock data from BankAccount module
+                const { mockBankAccounts } = await import('../BankAccount/mockData');
+
+                // Filter bank accounts to only show Savings type accounts
+                const savingsAccounts = mockBankAccounts.filter(account =>
+                    account.type === 'Savings' && account.isActive
+                );
+
+                setBankAccounts(savingsAccounts);
+            } catch (error) {
+                console.error('Error fetching bank accounts:', error);
+                // Fallback to empty array if import fails
+                setBankAccounts([]);
+            }
+        };
+
+        getBankAccounts();
+    }, []);
+
+    // Import mock data and functions
+    const [savingGoals, setSavingGoals] = useState<SavingGoal[]>([]);
+    
+    // Fetch saving goals
+    useEffect(() => {
+        const fetchSavingGoals = async () => {
+            try {
+                // Import mock data and functions from mockData
+                const { mockFetchSavingGoals } = await import('./mockData');
+                
+                // Fetch all saving goals
+                const response = await mockFetchSavingGoals();
+                setSavingGoals(response.data.data);
+            } catch (error) {
+                console.error('Error fetching saving goals:', error);
+                // Fallback to empty array if import fails
+                setSavingGoals([]);
+            }
+        };
+        
+        fetchSavingGoals();
+    }, []);
+    
+    // Effect to filter goals when bank account is selected
+    useEffect(() => {
+        const fetchGoalsByBankAccount = async () => {
+            if (selectedBankAccountId) {
+                try {
+                    // Import mock function
+                    const { mockFetchSavingGoalsByBankAccountId } = await import('./mockData');
+                    
+                    // Fetch goals filtered by bank account
+                    const response = await mockFetchSavingGoalsByBankAccountId(selectedBankAccountId);
+                    setSavingGoals(response.data.data);
+                } catch (error) {
+                    console.error('Error fetching goals by bank account:', error);
+                }
+            } else {
+                // If no bank account is selected, fetch all goals
+                try {
+                    const { mockFetchSavingGoals } = await import('./mockData');
+                    const response = await mockFetchSavingGoals();
+                    setSavingGoals(response.data.data);
+                } catch (error) {
+                    console.error('Error fetching all goals:', error);
+                }
+            }
+        };
+        
+        fetchGoalsByBankAccount();
+    }, [selectedBankAccountId]);
 
     // Icon mapping
     const iconMap: Record<string, React.ReactNode> = {
@@ -187,10 +194,17 @@ const Saving = () => {
                     deadline: goal.deadline ? dayjs(goal.deadline) : undefined,
                     autoContributionAmount: goal.autoContribution?.amount,
                     autoContributionFrequency: goal.autoContribution?.frequency,
+                    bankAccountId: goal.bankAccountId,
                 });
             }
         } else {
             form.resetFields();
+            // Pre-select the currently selected bank account when creating a new goal
+            if (selectedBankAccountId) {
+                form.setFieldsValue({
+                    bankAccountId: selectedBankAccountId
+                });
+            }
         }
 
         setIsModalVisible(true);
@@ -201,43 +215,65 @@ const Saving = () => {
         form.resetFields();
     };
 
-    const handleSubmit = (values: FormValues): void => {
-        const formattedGoal: SavingGoal = {
-            id: editingGoalId || 0, // Will be replaced if adding new goal
-            name: values.name,
-            icon: values.icon,
-            targetAmount: values.targetAmount,
-            currentAmount: values.currentAmount || 0,
-            deadline: values.deadline?.format('YYYY-MM-DD') || '',
-            category: values.category,
-            notes: values.notes || '',  // This fixes the 'notes' property type issue
-            contributions: values.currentAmount 
-                ? [{ date: dayjs().format('YYYY-MM-DD'), amount: values.currentAmount }] 
-                : [],
-            autoContribution: {
-                amount: values.autoContributionAmount || 0,
-                frequency: values.autoContributionFrequency || 'none'
-            },
-            status: 'active' as const
-        };
-    
-        if (editingGoalId) {
-            // Edit existing goal
-            setSavingGoals(
-                savingGoals.map(goal =>
-                    goal.id === editingGoalId ? formattedGoal : goal
-                )
-            );
-        } else {
-            // Add new goal
-            const newGoal = {
-                ...formattedGoal,
-                id: Math.max(0, ...savingGoals.map(g => g.id)) + 1,
-            };
-            setSavingGoals([...savingGoals, newGoal]);
+    const handleSubmit = async (values: FormValues): Promise<void> => {
+        // Ensure bankAccountId is set - use selected account if not specified in form
+        const goalBankAccountId = values.bankAccountId || selectedBankAccountId;
+
+        if (!goalBankAccountId) {
+            Modal.error({
+                title: 'Bank Account Required',
+                content: 'Please select a savings account for this goal.',
+            });
+            return;
         }
-    
-        setIsModalVisible(false);
+
+        try {
+            // Import mock functions
+            const { mockCreateSavingGoal, mockUpdateSavingGoal } = await import('./mockData');
+            
+            // Prepare goal data
+            const goalData = {
+                name: values.name,
+                icon: values.icon,
+                targetAmount: values.targetAmount,
+                currentAmount: values.currentAmount || 0,
+                deadline: values.deadline?.format('YYYY-MM-DD') || '',
+                category: values.category,
+                notes: values.notes || '',
+                autoContribution: {
+                    amount: values.autoContributionAmount || 0,
+                    frequency: values.autoContributionFrequency || 'none'
+                },
+                bankAccountId: goalBankAccountId
+            };
+
+            if (editingGoalId) {
+                // Edit existing goal
+                await mockUpdateSavingGoal(editingGoalId, goalData);
+            } else {
+                // Add new goal
+                await mockCreateSavingGoal(goalData);
+            }
+            
+            // Refresh the goals list
+            if (selectedBankAccountId) {
+                const { mockFetchSavingGoalsByBankAccountId } = await import('./mockData');
+                const response = await mockFetchSavingGoalsByBankAccountId(selectedBankAccountId);
+                setSavingGoals(response.data.data);
+            } else {
+                const { mockFetchSavingGoals } = await import('./mockData');
+                const response = await mockFetchSavingGoals();
+                setSavingGoals(response.data.data);
+            }
+
+            setIsModalVisible(false);
+        } catch (error) {
+            console.error('Error saving goal:', error);
+            Modal.error({
+                title: 'Error',
+                content: 'Failed to save the goal. Please try again.'
+            });
+        }
     }
 
     // Delete goal handler
@@ -248,8 +284,31 @@ const Saving = () => {
             okText: 'Yes, delete it',
             okType: 'danger',
             cancelText: 'Cancel',
-            onOk() {
-                setSavingGoals(savingGoals.filter(goal => goal.id !== goalId));
+            async onOk() {
+                try {
+                    // Import mock delete function
+                    const { mockDeleteSavingGoal } = await import('./mockData');
+                    
+                    // Delete the goal
+                    await mockDeleteSavingGoal(goalId);
+                    
+                    // Refresh the goals list
+                    if (selectedBankAccountId) {
+                        const { mockFetchSavingGoalsByBankAccountId } = await import('./mockData');
+                        const response = await mockFetchSavingGoalsByBankAccountId(selectedBankAccountId);
+                        setSavingGoals(response.data.data);
+                    } else {
+                        const { mockFetchSavingGoals } = await import('./mockData');
+                        const response = await mockFetchSavingGoals();
+                        setSavingGoals(response.data.data);
+                    }
+                } catch (error) {
+                    console.error('Error deleting goal:', error);
+                    Modal.error({
+                        title: 'Error',
+                        content: 'Failed to delete the goal. Please try again.'
+                    });
+                }
             }
         });
     };
@@ -263,7 +322,7 @@ const Saving = () => {
                 <Form layout="vertical">
                     <Form.Item label="Amount" name="contributionAmount">
                         <InputNumber
-                            prefix="$"
+                            prefix="đ"
                             min={1}
                             style={{ width: '100%' }}
                             id="contributionAmount"
@@ -273,45 +332,93 @@ const Saving = () => {
             ),
             okText: 'Add',
             cancelText: 'Cancel',
-            onOk() {
+            async onOk() {
                 const contributionAmountElement = document.getElementById('contributionAmount') as HTMLInputElement;
                 const contributionAmount = parseFloat(contributionAmountElement.value);
 
                 if (!isNaN(contributionAmount) && contributionAmount > 0) {
-                    setSavingGoals(
-                        savingGoals.map(goal => {
-                            if (goal.id === goalId) {
-                                const newCurrentAmount = goal.currentAmount + contributionAmount;
-                                const newContributions = [
-                                    ...goal.contributions,
-                                    { date: dayjs().format('YYYY-MM-DD'), amount: contributionAmount }
-                                ];
+                    try {
+                        // Get the goal to find its bank account ID
+                        const goal = savingGoals.find(g => g.id === goalId);
+                        if (!goal) return;
+                        
+                        // Import mock add contribution function
+                        const { mockAddContribution } = await import('./mockData');
+                        
+                        // Add the contribution
+                        await mockAddContribution(goalId, contributionAmount, goal.bankAccountId);
+                        
+                        // Refresh the goals list
+                        if (selectedBankAccountId) {
+                            const { mockFetchSavingGoalsByBankAccountId } = await import('./mockData');
+                            const response = await mockFetchSavingGoalsByBankAccountId(selectedBankAccountId);
+                            setSavingGoals(response.data.data);
+                        } else {
+                            const { mockFetchSavingGoals } = await import('./mockData');
+                            const response = await mockFetchSavingGoals();
+                            setSavingGoals(response.data.data);
+                        }
+                        
+                        // Refresh bank accounts to reflect the updated balance
+                        const getBankAccounts = async () => {
+                            try {
+                                // Import mock data from BankAccount module
+                                const { mockBankAccounts } = await import('../BankAccount/mockData');
 
-                                // Check if goal is now complete
-                                const status = newCurrentAmount >= goal.targetAmount ? 'completed' : 'active';
+                                // Filter bank accounts to only show Savings type accounts
+                                const savingsAccounts = mockBankAccounts.filter(account =>
+                                    account.type === 'Savings' && account.isActive
+                                );
 
-                                return {
-                                    ...goal,
-                                    currentAmount: newCurrentAmount,
-                                    contributions: newContributions,
-                                    status
-                                } as SavingGoal;
+                                setBankAccounts(savingsAccounts);
+                            } catch (error) {
+                                console.error('Error fetching bank accounts:', error);
+                                // Fallback to empty array if import fails
+                                setBankAccounts([]);
                             }
-                            return goal;
-                        })
-                    );
+                        };
+                        
+                        await getBankAccounts();
+                    } catch (error) {
+                        console.error('Error adding contribution:', error);
+                        Modal.error({
+                            title: 'Error',
+                            content: 'Failed to add contribution. Please try again.'
+                        });
+                    }
                 }
             }
         });
     };
 
-    // Calculate total savings
-    const totalSavings = savingGoals.reduce((sum, goal) => sum + goal.currentAmount, 0);
-    const totalTarget = savingGoals.reduce((sum, goal) => sum + goal.targetAmount, 0);
+    // Calculate total savings based on selected bank account
+    const totalSavings = selectedBankAccountId
+        ? savingGoals.filter(goal => goal.bankAccountId === selectedBankAccountId).reduce((sum, goal) => sum + goal.currentAmount, 0)
+        : 0;
+    const totalTarget = selectedBankAccountId
+        ? savingGoals.filter(goal => goal.bankAccountId === selectedBankAccountId).reduce((sum, goal) => sum + goal.targetAmount, 0)
+        : 0;
 
     // Filter goals by status
     const activeGoals = savingGoals.filter(goal => goal.status === 'active');
     const completedGoals = savingGoals.filter(goal => goal.status === 'completed');
+    const allGoals = savingGoals; // All goals regardless of status
+
+    // Use filtered goals when a bank account is selected
+    // Filter active and completed goals from filtered goals
+    const initialFilteredActiveGoals = selectedBankAccountId
+        ? savingGoals.filter(goal => goal.status === 'active' && goal.bankAccountId === selectedBankAccountId)
+        : [];
+    const initialFilteredCompletedGoals = selectedBankAccountId
+        ? savingGoals.filter(goal => goal.status === 'completed' && goal.bankAccountId === selectedBankAccountId)
+        : [];
+    const initialFilteredAllGoals = selectedBankAccountId
+        ? savingGoals.filter(goal => goal.bankAccountId === selectedBankAccountId)
+        : [];
+        
+    const displayedActiveGoals = selectedBankAccountId ? initialFilteredActiveGoals : activeGoals;
+    const displayedCompletedGoals = selectedBankAccountId ? initialFilteredCompletedGoals : completedGoals;
+    const displayedAllGoals = selectedBankAccountId ? initialFilteredAllGoals : allGoals;
 
     // Calculate progress percentage for each goal
     const getProgressPercent = (current: number, target: number): number =>
@@ -319,8 +426,20 @@ const Saving = () => {
 
     // Helper to format currency
     const formatCurrency = (amount: number): string => {
-        return `$${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        return `₫${amount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
     };
+
+    // Filter goals by selected bank account
+    const filteredGoals = selectedBankAccountId
+        ? savingGoals.filter(goal => goal.bankAccountId === selectedBankAccountId)
+        : [];
+
+    // Filter active and completed goals from filtered goals
+    const filteredActiveGoals = filteredGoals.filter(goal => goal.status === 'active');
+    const filteredCompletedGoals = filteredGoals.filter(goal => goal.status === 'completed');
+
+    // Get selected bank account name
+    const selectedBankAccount = bankAccounts.find(account => account.id === selectedBankAccountId);
 
     return (
         <div className="p-6 bg-slate-50 min-h-screen">
@@ -336,58 +455,119 @@ const Saving = () => {
                     onClick={() => showModal()}
                     size="large"
                     className="bg-blue-500 hover:bg-blue-600"
+                    disabled={!selectedBankAccountId}
                 >
                     Add New Goal
                 </Button>
             </div>
 
+            {/* Bank Account Selection */}
+            <Card className="shadow-sm mb-6">
+                <div className="flex items-center">
+                    <BankOutlined className="text-xl mr-3 text-blue-500" />
+                    <Text strong className="mr-4">Select Savings Account:</Text>
+                    <Select
+                        placeholder="Select a savings account to view goals"
+                        style={{ width: 400 }}
+                        value={selectedBankAccountId}
+                        onChange={setSelectedBankAccountId}
+                        className="flex-grow"
+                    >
+                        {bankAccounts.map(account => (
+                            <Option key={account.id} value={account.id}>
+                                {account.accountName} ({account.bankName}) - {account.balance.toLocaleString()} {account.currency}
+                            </Option>
+                        ))}
+                    </Select>
+                </div>
+
+                {!selectedBankAccountId && (
+                    <Alert
+                        message="Please select a savings account to view your goals"
+                        type="info"
+                        showIcon
+                        className="mt-4"
+                    />
+                )}
+
+                {selectedBankAccountId && selectedBankAccount && (
+                    <div className="mt-4">
+                        <Text type="secondary">Showing savings goals for: </Text>
+                        <Text strong className="text-blue-600">{selectedBankAccount.accountName} ({selectedBankAccount.bankName})</Text>
+                    </div>
+                )}
+            </Card>
+
             {/* Summary Statistics */}
             <Row gutter={[16, 16]} className="mb-6">
                 <Col xs={24} md={8}>
-                    <Card className="shadow-sm hover:shadow-md transition-shadow">
-                        <Statistic
-                            title={<Text strong className="text-lg">Total Savings</Text>}
-                            value={totalSavings}
-                            precision={2}
-                            valueStyle={{ color: '#3f8600', fontSize: '2rem' }}
-                            prefix="$"
-                            suffix={
-                                <Tooltip title="Total amount saved across all goals">
-                                    <InfoCircleOutlined className="ml-2 text-gray-400" />
-                                </Tooltip>
-                            }
-                        />
+                    <Card className="shadow-sm hover:shadow-md transition-shadow h-full flex flex-col">
+                        {selectedBankAccountId ? (
+                            <Statistic
+                                title={<Text strong className="text-lg">Total Savings</Text>}
+                                value={totalSavings}
+                                precision={0}
+                                valueStyle={{ color: '#3f8600', fontSize: '2rem' }}
+                                prefix="₫"
+                                suffix={
+                                    <Tooltip title="Total amount saved across all goals in this account">
+                                        <InfoCircleOutlined className="ml-2 text-gray-400 text-xl" />
+                                    </Tooltip>
+                                }
+                            />
+                        ) : (
+                            <div className="flex flex-col items-center justify-center h-full py-4">
+                                <Text strong className="text-lg mb-2">Total Savings</Text>
+                                <Text type="secondary">Select a bank account to view</Text>
+                            </div>
+                        )}
                     </Card>
                 </Col>
 
                 <Col xs={24} md={8}>
-                    <Card className="shadow-sm hover:shadow-md transition-shadow">
-                        <Statistic
-                            title={<Text strong className="text-lg">Overall Progress</Text>}
-                            value={getProgressPercent(totalSavings, totalTarget)}
-                            precision={0}
-                            valueStyle={{ fontSize: '2rem' }}
-                            suffix="%"
-                        />
-                        <Progress
-                            percent={getProgressPercent(totalSavings, totalTarget)}
-                            showInfo={false}
-                            status="active"
-                            className="mt-2"
-                        />
+                    <Card className="shadow-sm hover:shadow-md transition-shadow h-full flex flex-col">
+                        {selectedBankAccountId ? (
+                            <>
+                                <Statistic
+                                    title={<Text strong className="text-lg">Overall Progress</Text>}
+                                    value={getProgressPercent(totalSavings, totalTarget)}
+                                    precision={0}
+                                    valueStyle={{ fontSize: '2rem' }}
+                                    suffix="%"
+                                />
+                                <Progress
+                                    percent={getProgressPercent(totalSavings, totalTarget)}
+                                    showInfo={false}
+                                    status="active"
+                                    className="mt-2"
+                                />
+                            </>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center h-full py-4">
+                                <Text strong className="text-lg mb-2">Overall Progress</Text>
+                                <Text type="secondary">Select a bank account to view</Text>
+                            </div>
+                        )}
                     </Card>
                 </Col>
 
                 <Col xs={24} md={8}>
-                    <Card className="shadow-sm hover:shadow-md transition-shadow">
-                        <Statistic
-                            title={<Text strong className="text-lg">Active Goals</Text>}
-                            value={activeGoals.length}
-                            valueStyle={{ fontSize: '2rem' }}
-                            suffix={
-                                <Text type="secondary" className="text-base ml-1">/ {savingGoals.length} total</Text>
-                            }
-                        />
+                    <Card className="shadow-sm hover:shadow-md transition-shadow h-full flex flex-col">
+                        {selectedBankAccountId ? (
+                            <Statistic
+                                title={<Text strong className="text-lg">Active Goals</Text>}
+                                value={filteredActiveGoals.length}
+                                valueStyle={{ fontSize: '2rem' }}
+                                suffix={
+                                    <Text type="secondary" className="text-base ml-1">/ {filteredGoals.length} total</Text>
+                                }
+                            />
+                        ) : (
+                            <div className="flex flex-col items-center justify-center h-full py-4">
+                                <Text strong className="text-lg mb-2">Active Goals</Text>
+                                <Text type="secondary">Select a bank account to view</Text>
+                            </div>
+                        )}
                     </Card>
                 </Col>
             </Row>
@@ -399,10 +579,157 @@ const Saving = () => {
                     onChange={setActiveTab}
                     className="goals-tabs"
                 >
-                    <TabPane tab={`Active Goals (${activeGoals.length})`} key="active">
-                        {activeGoals.length > 0 ? (
+                    <TabPane tab={selectedBankAccountId ? `All Goals (${initialFilteredAllGoals.length})` : "All Goals"} key="all">
+                        {selectedBankAccountId && initialFilteredAllGoals.length === 0 ? (
+                            <Empty
+                                description="No savings goals for this account"
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            >
+                                <Button
+                                    type="primary"
+                                    onClick={() => showModal()}
+                                    className="bg-blue-500 hover:bg-blue-600"
+                                >
+                                    Create New Goal
+                                </Button>
+                            </Empty>
+                        ) : !selectedBankAccountId ? (
+                            <Alert
+                                message="Please select a savings account above to view your goals"
+                                type="info"
+                                showIcon
+                            />
+                        ) : displayedAllGoals.length > 0 ? (
                             <Row gutter={[16, 16]}>
-                                {activeGoals.map(goal => (
+                                {displayedAllGoals.map(goal => (
+                                    <Col xs={24} md={12} lg={8} key={goal.id}>
+                                        <Card
+                                            className={`goal-card h-full ${goal.status === 'completed' ? 'border-green-200' : ''}`}
+                                            hoverable
+                                            actions={goal.status === 'active' ? [
+                                                <Tooltip title="Add Contribution">
+                                                    <Button
+                                                        type="text"
+                                                        icon={<PlusOutlined />}
+                                                        onClick={() => handleAddContribution(goal.id)}
+                                                    >
+                                                        Add Funds
+                                                    </Button>
+                                                </Tooltip>,
+                                                <Tooltip title="Edit Goal">
+                                                    <Button
+                                                        type="text"
+                                                        icon={<EditOutlined />}
+                                                        onClick={() => showModal(goal.id)}
+                                                    />
+                                                </Tooltip>,
+                                                <Tooltip title="Delete Goal">
+                                                    <Button
+                                                        type="text"
+                                                        icon={<DeleteOutlined />}
+                                                        danger
+                                                        onClick={() => handleDelete(goal.id)}
+                                                    />
+                                                </Tooltip>,
+                                            ] : []}
+                                        >
+                                            {goal.status === 'completed' && (
+                                                <div className="absolute top-2 right-2">
+                                                    <Tag color="success" icon={<TrophyOutlined />}>
+                                                        Completed!
+                                                    </Tag>
+                                                </div>
+                                            )}
+                                            <div className={`flex items-center mb-4 ${goal.status === 'completed' ? 'pt-6' : ''}`}>
+                                                <div className={`p-2.5 rounded-full ${goal.status === 'completed' ? 'bg-green-100 text-green-600' : 'bg-blue-100 text-blue-600'} mr-3`}>
+                                                    {iconMap[goal.icon] || <RocketOutlined />}
+                                                </div>
+                                                <div>
+                                                    <Title level={5} className="mb-0">{goal.name}</Title>
+                                                    <Tag color="blue">{goal.category}</Tag>
+                                                </div>
+                                            </div>
+
+                                            <div className="mb-4">
+                                                <div className="flex justify-between mb-2">
+                                                    <Text>{formatCurrency(goal.currentAmount)}</Text>
+                                                    <Text type="secondary">of {formatCurrency(goal.targetAmount)}</Text>
+                                                </div>
+                                                <Progress
+                                                    percent={getProgressPercent(goal.currentAmount, goal.targetAmount)}
+                                                    status={
+                                                        goal.status === 'completed' || getProgressPercent(goal.currentAmount, goal.targetAmount) >= 100
+                                                            ? "success"
+                                                            : "active"
+                                                    }
+                                                />
+                                            </div>
+
+                                            <div className="text-sm text-gray-500 flex justify-between">
+                                                {goal.status === 'completed' ? (
+                                                    <span>Completed on: {goal.contributions.slice(-1)[0]?.date || 'N/A'}</span>
+                                                ) : (
+                                                    <>
+                                                        <span>Target date: {goal.deadline}</span>
+                                                        {goal.autoContribution.amount > 0 && (
+                                                            <Tooltip title={`Auto-contributing ${formatCurrency(goal.autoContribution.amount)} ${goal.autoContribution.frequency}`}>
+                                                                <span className="text-green-600 font-semibold">Auto-saving</span>
+                                                            </Tooltip>
+                                                        )}
+                                                    </>
+                                                )}
+                                            </div>
+
+                                            {goal.notes && goal.status === 'active' && (
+                                                <div className="mt-3 text-sm text-gray-600">
+                                                    <Paragraph ellipsis={{ rows: 2 }} className="mb-0">
+                                                        {goal.notes}
+                                                    </Paragraph>
+                                                </div>
+                                            )}
+                                        </Card>
+                                    </Col>
+                                ))}
+                            </Row>
+                        ) : (
+                            <Empty
+                                description="No savings goals"
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            >
+                                <Button
+                                    type="primary"
+                                    onClick={() => showModal()}
+                                    className="bg-blue-500 hover:bg-blue-600"
+                                >
+                                    Create Your First Goal
+                                </Button>
+                            </Empty>
+                        )}
+                    </TabPane>
+                    
+                    <TabPane tab={selectedBankAccountId ? `Active Goals (${filteredActiveGoals.length})` : "Active Goals"} key="active">
+                        {selectedBankAccountId && filteredActiveGoals.length === 0 ? (
+                            <Empty
+                                description="No active savings goals for this account"
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            >
+                                <Button
+                                    type="primary"
+                                    onClick={() => showModal()}
+                                    className="bg-blue-500 hover:bg-blue-600"
+                                >
+                                    Create New Goal
+                                </Button>
+                            </Empty>
+                        ) : !selectedBankAccountId ? (
+                            <Alert
+                                message="Please select a savings account above to view your goals"
+                                type="info"
+                                showIcon
+                            />
+                        ) : displayedActiveGoals.length > 0 ? (
+                            <Row gutter={[16, 16]}>
+                                {displayedActiveGoals.map(goal => (
                                     <Col xs={24} md={12} lg={8} key={goal.id}>
                                         <Card
                                             className="goal-card h-full"
@@ -495,10 +822,21 @@ const Saving = () => {
                         )}
                     </TabPane>
 
-                    <TabPane tab={`Completed Goals (${completedGoals.length})`} key="completed">
-                        {completedGoals.length > 0 ? (
+                    <TabPane tab={selectedBankAccountId ? `Completed Goals (${filteredCompletedGoals.length})` : "Completed Goals"} key="completed">
+                        {selectedBankAccountId && filteredCompletedGoals.length === 0 ? (
+                            <Empty
+                                description="No completed savings goals for this account"
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            />
+                        ) : !selectedBankAccountId ? (
+                            <Alert
+                                message="Please select a savings account above to view your goals"
+                                type="info"
+                                showIcon
+                            />
+                        ) : displayedCompletedGoals.length > 0 ? (
                             <Row gutter={[16, 16]}>
-                                {completedGoals.map(goal => (
+                                {displayedCompletedGoals.map(goal => (
                                     <Col xs={24} md={12} lg={8} key={goal.id}>
                                         <Card className="goal-card h-full border-green-200" hoverable>
                                             <div className="absolute top-2 right-2">
@@ -542,7 +880,7 @@ const Saving = () => {
             </Card>
 
             {/* Recent Activity */}
-            {savingGoals.length > 0 && (
+            {(selectedBankAccountId ? filteredGoals.length > 0 : savingGoals.length > 0) && (
                 <Card
                     title="Recent Contributions"
                     className="shadow-sm"
@@ -550,7 +888,7 @@ const Saving = () => {
                 >
                     <List
                         dataSource={
-                            savingGoals
+                            (selectedBankAccountId ? filteredGoals : savingGoals)
                                 .flatMap(goal =>
                                     goal.contributions.map(contrib => ({
                                         ...contrib,
@@ -633,8 +971,8 @@ const Saving = () => {
                             >
                                 <InputNumber
                                     min={1}
-                                    formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                    parser={(value: string | undefined) => value ? value.replace(/\$\s?|(,*)/g, '') : 1}
+                                    formatter={(value) => `₫ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    parser={(value: string | undefined) => value ? value.replace(/₫\s?|(,*)/g, '') : 1}
                                     style={{ width: '100%' }}
                                 />
                             </Form.Item>
@@ -648,8 +986,8 @@ const Saving = () => {
                             >
                                 <InputNumber
                                     min={1}
-                                    formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                    parser={(value: string | undefined) => value ? value.replace(/\$\s?|(,*)/g, '') : 1}
+                                    formatter={(value) => `₫ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    parser={(value: string | undefined) => value ? value.replace(/₫\s?|(,*)/g, '') : 1}
                                     style={{ width: '100%' }}
                                 />
                             </Form.Item>
@@ -692,8 +1030,8 @@ const Saving = () => {
                             >
                                 <InputNumber
                                     min={0}
-                                    formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                    parser={(value: string | undefined) => value ? value.replace(/\$\s?|(,*)/g, '') : 0}
+                                    formatter={(value) => `₫ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    parser={(value: string | undefined) => value ? value.replace(/₫\s?|(,*)/g, '') : 0}
                                     style={{ width: '100%' }}
                                 />
                             </Form.Item>
@@ -722,6 +1060,21 @@ const Saving = () => {
                             rows={3}
                             placeholder="Additional details about this goal..."
                         />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="bankAccountId"
+                        label="Savings Account"
+                        tooltip="Select the savings account to associate with this goal"
+                        rules={[{ required: true, message: 'Please select a savings account for this goal' }]}
+                    >
+                        <Select placeholder="Select a savings account">
+                            {bankAccounts.map(account => (
+                                <Option key={account.id} value={account.id}>
+                                    {account.accountName} ({account.bankName}) - {account.balance.toLocaleString()} {account.currency}
+                                </Option>
+                            ))}
+                        </Select>
                     </Form.Item>
 
                     <Form.Item className="mb-0 text-right">

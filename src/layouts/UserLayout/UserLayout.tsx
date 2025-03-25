@@ -6,7 +6,7 @@ import { MdCategory, MdLogout, MdSpaceDashboard } from "react-icons/md";
 import { Outlet, useNavigate } from "react-router-dom";
 import { SiGoogleanalytics } from "react-icons/si";
 import { BsChatDotsFill, BsFillGearFill } from "react-icons/bs";
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from '@ant-design/icons';
+import { BankOutlined, MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from '@ant-design/icons';
 import Notification from '@/components/Notification/Notification';
 import ChatAI from '@/components/ChatAI';
 import { getProfile, ProfileType } from '@/services/authAPI';
@@ -15,6 +15,7 @@ import config from '@/config';
 import { PiPiggyBankFill } from "react-icons/pi";
 import { FaFileInvoiceDollar, FaUser } from "react-icons/fa";
 import { IoGrid } from "react-icons/io5";
+import { RiFeedbackFill } from "react-icons/ri";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title, Text } = Typography;
@@ -26,6 +27,8 @@ const menuItems: MenuItemType[] = [
     { key: "analysis", label: 'Analysis', icon: <SiGoogleanalytics /> },
     { key: "bill", label: 'Bill', icon: <FaFileInvoiceDollar /> },
     { key: "advice", label: 'Advice', icon: <BsChatDotsFill /> },
+    { key: "bankAccount", label: 'Bank Accounts', icon: <BankOutlined /> },
+    { key: "feedback", label: 'Feedback', icon: <RiFeedbackFill /> },
     { key: "setting", label: 'Setting', icon: <BsFillGearFill /> },
     // { key: "profile", label: 'Profile', icon: <FaUser /> },
     { key: 'dashboard', label: 'Dashboard', icon: <MdSpaceDashboard /> },

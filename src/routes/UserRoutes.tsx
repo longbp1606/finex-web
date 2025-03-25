@@ -13,6 +13,9 @@ import Saving from "@/pages/User/Saving";
 import Bill from "@/pages/User/Bill";
 import Setting from "@/pages/User/Setting";
 import Profile from "@/pages/User/Profile";
+import BankAccount from "@/pages/User/BankAccount";
+import path from "path";
+import Feedback from "@/pages/User/Feedback";
 
 const UserRouter = () => {
     const { AccountID } = useAuth();
@@ -36,8 +39,10 @@ const userRoutes = {
         { path: config.routes.user.category, element: <Category /> },
         { path: config.routes.user.analysis, element: <Analysis /> },
         { path: config.routes.user.bill, element: <Bill />},
+        { path: config.routes.user.bankAccount, element: <BankAccount />},
         { path: config.routes.user.advice, element: <Chat />},
         { path: config.routes.user.setting, element: <Setting />},
+        { path: config.routes.user.feedback, element: <Feedback />},
         { path: config.routes.user.profile, element: <Profile />},
         // { path: config.routes.user.report, element: <Dashboard /> },
         // { path: config.routes.user.alert, element: <Alert /> },
