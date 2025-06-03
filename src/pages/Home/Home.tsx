@@ -1,7 +1,7 @@
 import Container from '@/components/Container';
 import * as Styled from './Home.styled';
 import { useDocumentTitle } from '@/hooks'
-import { Button, Card, Col, Flex, Image, Input, List, Row, Skeleton, Typography } from 'antd';
+import { Button, Card, Col, Flex, Image, Input, List, Row, Typography } from 'antd';
 import { FeatureCardContents, FeedbackContents, LogoURLs, navbar } from './Home.const';
 import { MenuType } from '@/utils/type';
 import { ArrowRightOutlined, FacebookFilled, InstagramFilled, XOutlined } from '@ant-design/icons';

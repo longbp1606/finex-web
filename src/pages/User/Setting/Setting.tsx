@@ -20,9 +20,7 @@ import {
   UserOutlined,
   LockOutlined,
   BellOutlined,
-  DollarOutlined,
   GlobalOutlined,
-  FileOutlined,
   UploadOutlined,
   SaveOutlined
 } from '@ant-design/icons';

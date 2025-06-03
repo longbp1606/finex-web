@@ -21,7 +21,7 @@ import {
   DeleteButton,
 } from "./Budget.styled";
 import "./index.css";
-import { createBudgetWithAI } from "@/services/boardAPI";
+// import { createBudgetWithAI } from "@/services/boardAPI";
 import { deleteBoard, dtoGetBoard, getBoard, getBoardDetail } from "@/services/boardAPI";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
@@ -120,7 +120,7 @@ const Budget = ({ onSelectBudget }: { onSelectBudget: (id: string) => void }) =>
 
     setCreatingBudget(true);
     try {
-      const result = await createBudgetWithAI(aiPrompt);
+      // const result = await createBudgetWithAI(aiPrompt);
       toast.success("Budget created successfully with AI!");
       fetchBudgets(); // Refresh the budget list after creation
       setAiModalVisible(false);

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Typography, Space, Table, Tag, Modal, Form, Input, InputNumber, Select, Empty, Card, Flex, Tooltip, TableColumnsType } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, BankOutlined, EyeOutlined } from '@ant-design/icons';
+import { Button, Typography, Space, Tag, Modal, Form, Input, InputNumber, Select, Empty, Flex, Tooltip, TableColumnsType } from 'antd';
+import { PlusOutlined, EditOutlined, DeleteOutlined, BankOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';
 import * as Styled from './BankAccount.styled';
 import { BankAccount as BankAccountType, CreateBankAccountRequest, UpdateBankAccountRequest } from '@/services/bankAccountAPI';
-import { mockBankAccounts, mockFetchBankAccounts, mockCreateBankAccount, mockUpdateBankAccount, mockDeleteBankAccount } from './mockData';
+import { mockFetchBankAccounts, mockCreateBankAccount, mockUpdateBankAccount, mockDeleteBankAccount } from './mockData';
 import ConfirmDeleteModal from '@/components/DeleteModal/ConfirmDeleteModal';
 
 const { Title, Text } = Typography;
@@ -105,7 +105,7 @@ const BankAccount: React.FC = () => {
             title: 'Account Name',
             dataIndex: 'accountName',
             key: 'accountName',
-            render: (text: string, record: BankAccountType) => (
+            render: (text: string) => (
                 <Space>
                     <BankOutlined />
                     <span>{text}</span>
@@ -122,15 +122,15 @@ const BankAccount: React.FC = () => {
             dataIndex: 'accountNumber',
             key: 'accountNumber',
             render: (text: string) => (
-                <span style={{ fontFamily: 'monospace' }}>{text}</span>
+                <span className='font-mono'>{text}</span>
             ),
         },
         {
             title: 'Balance',
             dataIndex: 'balance',
             key: 'balance',
-            render: (balance: number, record: BankAccountType) => (
-                <span style={{ fontWeight: 'bold' }}>
+            render: (balance: number) => (
+                <span className='font-bold'>
                     ₫{balance.toLocaleString()}
                 </span>
             ),

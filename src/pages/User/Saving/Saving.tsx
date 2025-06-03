@@ -69,11 +69,6 @@ interface SavingGoal {
     bankAccountId?: string;
 }
 
-interface ContributionWithGoalInfo extends Contribution {
-    goalName: string;
-    goalIcon: string;
-}
-
 interface FormValues {
     name: string;
     icon: string;

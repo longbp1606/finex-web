@@ -14,7 +14,6 @@ import Bill from "@/pages/User/Bill";
 import Setting from "@/pages/User/Setting";
 import Profile from "@/pages/User/Profile";
 import BankAccount from "@/pages/User/BankAccount";
-import path from "path";
 import Feedback from "@/pages/User/Feedback";
 
 const UserRouter = () => {

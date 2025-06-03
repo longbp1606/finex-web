@@ -1,5 +1,4 @@
 import { ChatResponse } from "@/services/chatAPI";
-import { ChatType } from "@/utils/type";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type MessageState = {

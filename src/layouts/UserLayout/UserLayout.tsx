@@ -13,7 +13,7 @@ import { getProfile, ProfileType } from '@/services/authAPI';
 import cookieUtils from '@/services/cookieUtils';
 import config from '@/config';
 import { PiPiggyBankFill } from "react-icons/pi";
-import { FaFileInvoiceDollar, FaUser } from "react-icons/fa";
+import { FaFileInvoiceDollar } from "react-icons/fa";
 import { IoGrid } from "react-icons/io5";
 import { RiFeedbackFill } from "react-icons/ri";
 

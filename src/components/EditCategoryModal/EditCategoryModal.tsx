@@ -51,6 +51,8 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({ visible, onClose,
         }
     }, [category]);
 
+    console.log(selectedTheme);
+
     const handleUpload = (info: UploadChangeParam<UploadFile>) => {
         if (info.file.status === "done") {
             const url = URL.createObjectURL(info.file.originFileObj as Blob);

@@ -29,7 +29,7 @@ interface CategoryModalProps {
 }
 
 const CategoryModal: React.FC<CategoryModalProps> = ({ visible, onClose, onAddCategory }) => {
-    const [selectedTheme, setSelectedTheme] = useState("null");
+// Removed unused state variable 'selectedTheme'
     const [accentColor, setAccentColor] = useState("#ff9800");
     const [categoryName, setCategoryName] = useState("");
     const [description, setDescription] = useState("");
@@ -44,7 +44,6 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ visible, onClose, onAddCa
             const url = URL.createObjectURL(info.file.originFileObj as Blob);
             setUploadedImage(url);
             setBackgroundImage(url); // Cập nhật backgroundImage trong state
-            setSelectedTheme("custom");
         }
     };
 
@@ -75,7 +74,6 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ visible, onClose, onAddCa
         setCategoryName("");
         setDescription("");
         setTotalMoney("");
-        setSelectedTheme("");
         setUploadedImage(null);
         setAccentColor("#ff9800");
         setBackgroundImage(Theme1);
@@ -142,7 +140,6 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ visible, onClose, onAddCa
                                 selected={!!uploadedImage} // Nếu có ảnh upload thì chọn
                                 onClick={() => {
                                     setBackgroundImage(""); // Xóa theme khi chọn ảnh upload
-                                    setSelectedTheme("custom");
                                 }}
                             >
                                 {uploadedImage ? (

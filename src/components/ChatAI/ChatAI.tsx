@@ -23,7 +23,8 @@ const ChatAI = () => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const getHistoryChat = async () => {
-      setHistoryLoading(true);
+    console.log(historyLoading);  
+    setHistoryLoading(true);
       try {
         const response = await listChat();
         const historyMessages = response.data.data as ChatResponse[];

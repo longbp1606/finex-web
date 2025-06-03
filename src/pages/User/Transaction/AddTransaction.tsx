@@ -46,6 +46,7 @@ const AddTransaction: FC<{ id: string; onBack: () => void }> = ({ id, onBack }) 
   };
 
   const handleSearch = (value: string) => {
+    console.log(searchText);
     setSearchText(value);
     setFilteredTransactions(
       value
