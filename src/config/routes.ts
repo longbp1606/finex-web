@@ -18,11 +18,14 @@ const routes = {
     feedback: '/user/feedback',
     setting: '/user/setting',
     profile: '/user/profile',
+    subscription: '/user/subscription',
   },
   admin: {
     systemCategory: '/admin/systemCategory',
     dashboard: '/admin/dashboard',
     account: '/admin/account',
+    subscription: '/admin/subscription',
+    userSubscription: '/admin/user-subscription',
   },
   api: {
     loginGoogle: "/auth/signin",

@@ -5,6 +5,8 @@ import { MenuItemType } from "antd/es/menu/interface";
 import { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom"
 import { MdOutlineCategory } from "react-icons/md";
+import { RiFileList3Line } from "react-icons/ri";
+import { MdSubscriptions } from "react-icons/md";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title } = Typography;
@@ -24,6 +26,16 @@ const menuItems: MenuItemType[] = [
         key: "account",
         label: 'Account',
         icon: <MdOutlineCategory />,
+    },
+    {
+        key: "subscription",
+        label: 'Subscription',
+        icon: <RiFileList3Line />,
+    },
+    {
+        key: "user-subscription",
+        label: 'User Subscriptions',
+        icon: <MdSubscriptions />,
     },
     // {
     //     key: "userAccount",

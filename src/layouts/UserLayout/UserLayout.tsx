@@ -2,7 +2,7 @@ import * as Styled from './UserLayout.styled';
 import { Avatar, Button, Flex, Layout, Menu, Typography } from "antd";
 import { MenuItemType } from "antd/es/menu/interface";
 import { useEffect, useState } from "react";
-import { MdCategory, MdLogout, MdSpaceDashboard } from "react-icons/md";
+import { MdCategory, MdLogout, MdSpaceDashboard, MdSubscriptions } from "react-icons/md";
 import { Outlet, useNavigate } from "react-router-dom";
 import { SiGoogleanalytics } from "react-icons/si";
 import { BsChatDotsFill, BsFillGearFill } from "react-icons/bs";
@@ -28,6 +28,7 @@ const menuItems: MenuItemType[] = [
     { key: "bill", label: 'Bill', icon: <FaFileInvoiceDollar /> },
     { key: "advice", label: 'Advice', icon: <BsChatDotsFill /> },
     { key: "bankAccount", label: 'Bank Accounts', icon: <BankOutlined /> },
+    { key: "subscription", label: 'Subscriptions', icon: <MdSubscriptions /> },
     { key: "feedback", label: 'Feedback', icon: <RiFeedbackFill /> },
     { key: "setting", label: 'Setting', icon: <BsFillGearFill /> },
     // { key: "profile", label: 'Profile', icon: <FaUser /> },

@@ -15,6 +15,7 @@ import Setting from "@/pages/User/Setting";
 import Profile from "@/pages/User/Profile";
 import BankAccount from "@/pages/User/BankAccount";
 import Feedback from "@/pages/User/Feedback";
+import Subscription from "@/pages/User/Subscription";
 
 const UserRouter = () => {
     const { AccountID } = useAuth();
@@ -43,6 +44,7 @@ const userRoutes = {
         { path: config.routes.user.setting, element: <Setting />},
         { path: config.routes.user.feedback, element: <Feedback />},
         { path: config.routes.user.profile, element: <Profile />},
+        { path: config.routes.user.subscription, element: <Subscription />},
         // { path: config.routes.user.report, element: <Dashboard /> },
         // { path: config.routes.user.alert, element: <Alert /> },
     ]
