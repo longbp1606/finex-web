@@ -1,3 +1,4 @@
+import { getProfile, ProfileType } from "@/services/authAPI";
 import cookieUtils from "@/services/cookieUtils";
 import { useCallback, useEffect, useState } from "react";
 
@@ -18,6 +19,7 @@ const getAccountID = () => {
 const useAuth = () => {
     const [AccountID, setAccountID] = useState<string | null>(getAccountID());
     const [loading, setLoading] = useState(false);
+    const [profile, setProfile] = useState<ProfileType>();
 
     const token = cookieUtils.getToken();
 
@@ -32,6 +34,15 @@ const useAuth = () => {
         }
     }, [token]);
 
+    const fetchProfile = async () => {
+        try {
+            const res = await getProfile();
+            setProfile(res.data.data);
+        } catch (error) {
+            console.log(error); 
+        }
+    }
+
     useEffect(() => {
         const token = cookieUtils.getToken();
 
@@ -43,6 +54,8 @@ const useAuth = () => {
             setLoading(true);
 
             setAccountID(getAccountID());
+
+            fetchProfile();
         } finally {
             setLoading(false);
         }
@@ -52,7 +65,7 @@ const useAuth = () => {
         return () => clearInterval(interval);
     }, [checkTokenExpiration]);
 
-    return { AccountID, loading };
+    return { AccountID, loading, profile };
 }
 
 export default useAuth;

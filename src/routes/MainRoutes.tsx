@@ -1,9 +1,19 @@
 import config from '@/config';
+import useAuth from '@/hooks/useAuth';
 import MainLayout from '@/layouts/MainLayout';
-import NotFound from '@/pages/404';
 import Home from '@/pages/Home';
+import { Navigate } from 'react-router-dom';
 
 const MainRouter = () => {
+    const { profile } = useAuth();
+
+    if (profile?.role === 1) {
+        return <Navigate to={config.routes.admin.dashboard} />;
+    }
+    if (profile?.role === 0) {
+        return <Navigate to={config.routes.user.dashboard} />;
+    }
+    
     return <MainLayout />;
 };
 
@@ -13,12 +23,10 @@ const publicRoutes = {
     ]
 };
 
-const notFoundRoutes = { path: '*', element: <NotFound /> };
-
 const MainRoutes = {
     path: '/',
     element: <MainRouter />,
-    children: [publicRoutes, notFoundRoutes],
+    children: [publicRoutes],
 };
 
 export default MainRoutes;

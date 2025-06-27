@@ -5,9 +5,13 @@ import SystemCategory from "@/pages/Admin/SystemCategory";
 import Account from "@/pages/Admin/Account";
 import Subscription from "@/pages/Admin/Subscription";
 import UserSubscription from "@/pages/Admin/UserSubscription";
+import useAuth from "@/hooks/useAuth";
+import { Navigate } from "react-router-dom";
 
 const AdminRouter = () => {
-    return <AdminLayout />
+    const { profile } = useAuth();
+    return profile?.role === 0 ? <Navigate to={config.routes.error[403]} /> : <AdminLayout />; 
+    // return <AdminLayout />;
 };
 
 const adminRoutes = {

@@ -3,6 +3,7 @@ import AuthForm from "@/components/AuthForm/AuthForm"
 import { loginFields } from "@/components/AuthForm/AuthForm.fields"
 import config from '@/config';
 import { useDocumentTitle } from '@/hooks';
+import useAuth from '@/hooks/useAuth';
 import { login, LoginSchemeType } from '@/services/authAPI';
 import cookieUtils from '@/services/cookieUtils';
 import { message } from 'antd';
@@ -16,6 +17,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     const [messageApi, contextHolder] = message.useMessage();
+    const { profile } = useAuth();
 
     const onFinish = async (values: any) => {
         try {
@@ -33,7 +35,7 @@ const Login = () => {
             else {
                 await messageApi.success(response.data.message);
                 cookieUtils.setItem(config.cookies.token, response.data.data.accessToken);
-                navigate(config.routes.user.budget);
+                profile?.role === 0 ? navigate(config.routes.user.dashboard) : navigate(config.routes.admin.dashboard);
             }
         } catch (error: any) {
             if (error.response) {

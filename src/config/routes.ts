@@ -27,6 +27,10 @@ const routes = {
     subscription: '/admin/subscription',
     userSubscription: '/admin/user-subscription',
   },
+  error: {
+    403: '/error/forbidden',
+    404: '/error/notFound',
+  },
   api: {
     loginGoogle: "/auth/signin",
   },

@@ -4,6 +4,7 @@ import { useScrollToTop } from "@/hooks";
 import UserRoutes from "./UserRoutes";
 import AdminRoutes from "./AdminRoutes";
 import AuthRoutes from "./AuthRoutes";
+import ErrorRoutes from "./ErrorRoutes";
 
 const RoutesComponent = () => {
     useScrollToTop();
@@ -12,7 +13,8 @@ const RoutesComponent = () => {
         MainRoutes,
         UserRoutes,
         AdminRoutes,
-        AuthRoutes, 
+        AuthRoutes,
+        ErrorRoutes, 
     ]);
 }
 
