@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
+import 'chart.js/auto';
 import App from './App.tsx';
 import { DefaultTheme, ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
@@ -10,6 +11,9 @@ import { store } from './store/index.ts';
 import LanguageProvider from './lang/LanguageProvider.tsx';
 import { ConfigProvider, App as AppAntd } from 'antd';
 import { AntdThemeConfig } from './themes/index.ts';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
+import dayjs from 'dayjs';
+dayjs.extend(weekOfYear);
 
 export const breakpoints = {
   xs: '360px',
