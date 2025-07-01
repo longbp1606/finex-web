@@ -3,7 +3,6 @@ import AuthForm from "@/components/AuthForm/AuthForm"
 import { loginFields } from "@/components/AuthForm/AuthForm.fields"
 import config from '@/config';
 import { useDocumentTitle } from '@/hooks';
-import useAuth from '@/hooks/useAuth';
 import { login, LoginSchemeType } from '@/services/authAPI';
 import cookieUtils from '@/services/cookieUtils';
 import { message } from 'antd';
@@ -17,7 +16,6 @@ const Login = () => {
     const navigate = useNavigate();
 
     const [messageApi, contextHolder] = message.useMessage();
-    const { profile } = useAuth();
 
     const onFinish = async (values: any) => {
         try {
