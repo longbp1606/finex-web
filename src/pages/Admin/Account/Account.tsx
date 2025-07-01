@@ -79,7 +79,10 @@ const Account = () => {
             title: "Email", dataIndex: "email", key: "email",
             render: (email: string) => String(email.slice(0, 3) + "**********@" + email.split("@")[1])
         },
-        { title: "Phone", dataIndex: "phone", key: "phone" },
+        { 
+            title: "Phone", dataIndex: "phone", key: "phone",
+            render: (phone: string) => String(phone.slice(0, 3) + "***" + phone.slice(6, 10))
+        },
         {
             title: "Role", dataIndex: "role", key: "avt",
             render: (role: number) => <Tag color={role === 0 ? "green" : "red"}>{role === 0 ? "Customer" : "Admin"}</Tag>
