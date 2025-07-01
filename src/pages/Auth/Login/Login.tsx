@@ -35,7 +35,7 @@ const Login = () => {
             else {
                 await messageApi.success(response.data.message);
                 cookieUtils.setItem(config.cookies.token, response.data.data.accessToken);
-                profile?.role === 0 ? navigate(config.routes.user.dashboard) : navigate(config.routes.admin.dashboard);
+                navigate("/");
             }
         } catch (error: any) {
             if (error.response) {
