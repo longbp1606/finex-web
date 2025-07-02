@@ -1,3 +1,4 @@
+import { getWau } from "@/services/chartAPI";
 import { DatePicker, Flex } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
@@ -9,9 +10,14 @@ export default function WauChart() {
     const [avg, setAvg] = useState(0);
 
     useEffect(() => {
-        const data = Array.from({ length: 7 }, () => Math.floor(Math.random() * (1000 - 100 + 1)) + 100);
-        setData(data);
-        setAvg(data.reduce((prev, cur) => prev+cur) / data.length);
+        const fetchData = async () => {
+            const response = await getWau({ week: currentWeek.toDate() });
+            const data: number[] = response.data.data;
+            setData(data);
+            setAvg(data.reduce((prev, cur) => prev+cur) / data.length);
+        }
+
+        fetchData();
     }, [currentWeek]);
 
     return (

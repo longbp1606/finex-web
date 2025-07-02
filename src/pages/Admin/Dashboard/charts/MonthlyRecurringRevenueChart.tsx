@@ -1,3 +1,4 @@
+import { getMonthlyRecurringRevenue } from "@/services/chartAPI";
 import { DatePicker, Flex } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
@@ -9,19 +10,24 @@ export default function MonthlyRecurringRevenueChart() {
     const [avg, setAvg] = useState(0);
 
     useEffect(() => {
-        const data = Array.from({ length: 12 }, () => Math.floor(Math.random() * (1000 - 100 + 1)) + 100);
-        setData(data);
-        setAvg(data.reduce((prev, cur) => prev + cur) / data.length)
+        const fetchMonthlyRecurringRevenue = async () => {
+            const response = await getMonthlyRecurringRevenue({ year: currentYear.toDate() })
+            const data: number[] = response.data.data;
+            setData(data);
+            setAvg(data.reduce((prev, cur) => prev + cur) / data.length)
+        }
+
+        fetchMonthlyRecurringRevenue();
     }, [currentYear])
 
     return (
         <Flex vertical gap={12}>
-            <DatePicker 
-                picker="year" 
+            <DatePicker
+                picker="year"
                 className="max-w-[320px]"
                 onChange={(v) => setCurrentYear(v)}
                 value={currentYear} />
-            
+
             <Chart
                 type="scatter"
                 data={{
