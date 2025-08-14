@@ -26,6 +26,7 @@ const routes = {
     account: '/admin/account',
     subscription: '/admin/subscription',
     userSubscription: '/admin/user-subscription',
+    feedback: '/admin/feedback',
   },
   error: {
     403: '/error/forbidden',
