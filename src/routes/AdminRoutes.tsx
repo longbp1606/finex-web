@@ -6,6 +6,8 @@ import Account from "@/pages/Admin/Account";
 import Subscription from "@/pages/Admin/Subscription";
 import UserSubscription from "@/pages/Admin/UserSubscription";
 import AdminFeedback from "@/pages/Admin/Feedback/Feedback";
+import SubscriptionTransactions from "@/pages/Admin/SubscriptionTransactions";
+import AdsIncome from "@/pages/Admin/AdsIncome/AdsIncome";
 import useAuth from "@/hooks/useAuth";
 import { Navigate } from "react-router-dom";
 
@@ -30,6 +32,11 @@ const adminRoutes = {
       element: <UserSubscription />,
     },
     { path: config.routes.admin.feedback, element: <AdminFeedback /> },
+    { path: config.routes.admin.adsIncome, element: <AdsIncome /> },
+    {
+      path: config.routes.admin.subscriptionTransactions,
+      element: <SubscriptionTransactions />,
+    },
   ],
 };
 

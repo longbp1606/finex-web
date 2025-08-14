@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { MdLogout, MdSpaceDashboard } from "react-icons/md";
 import { RiFileList3Line } from "react-icons/ri";
+import { BarChartOutlined, DollarOutlined } from "@ant-design/icons";
 import { MdSubscriptions } from "react-icons/md";
 import cookieUtils from "@/services/cookieUtils";
 import config from "@/config";
@@ -25,7 +26,17 @@ const menuItems: MenuItemType[] = [
   //     key: "systemCategory",
   //     label: 'System Category',
   //     icon: <MdOutlineCategory />,
+  {
+    key: "ads-income",
+    label: "Ads Income",
+    icon: <BarChartOutlined />,
+  },
   // },
+  {
+    key: "subscription-transactions",
+    label: "Subscription Transactions",
+    icon: <DollarOutlined />,
+  },
   {
     key: "account",
     label: "Account",

@@ -27,6 +27,8 @@ const routes = {
     subscription: '/admin/subscription',
     userSubscription: '/admin/user-subscription',
     feedback: '/admin/feedback',
+    subscriptionTransactions: '/admin/subscription-transactions',
+    adsIncome: '/admin/ads-income',
   },
   error: {
     403: '/error/forbidden',
